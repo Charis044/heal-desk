@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>韧芽 · 前后端融合结构说明（多了什么）</title>
+<style>
+  :root{
+    --bg:#141021;--bg2:#1b1727;--panel:#221d30;--panel2:#2a2338;
+    --ink:#f5efe6;--dim:#b8adc9;--faint:#8b7fa0;--line:#37304a;
+    --amber:#f0c48f;--amber-soft:rgba(240,196,143,.14);
+    --green:#58b368;--red:#e8493d;--blue:#7fb3a3;--accent:#d6789a;
+    --new:#67944b;--new-soft:rgba(103,148,75,.16);--mod:#E8894E;--mod-soft:rgba(232,137,78,.14);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;line-height:1.7;-webkit-font-smoothing:antialiased;
+    background-image:radial-gradient(circle at 20% 6%,rgba(214,120,154,.10),transparent 30%),radial-gradient(circle at 82% 3%,rgba(7,141,140,.12),transparent 28%);}
+  .wrap{max-width:980px;margin:0 auto;padding:0 24px}
+  header.hero{padding:72px 0 36px;text-align:center}
+  .eyebrow{font-size:12px;letter-spacing:.32em;text-transform:uppercase;color:var(--amber);margin:0 0 14px}
+  h1{font-size:40px;line-height:1.2;margin:0 0 12px;font-weight:700;
+    background:linear-gradient(120deg,#f5efe6,#f0c48f);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .sub{color:var(--dim);font-size:15px;max-width:680px;margin:0 auto}
+  .meta{margin-top:24px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+  .chip{font-size:12px;color:var(--dim);border:1px solid var(--line);padding:5px 12px;border-radius:999px;background:var(--panel)}
+  section{padding:40px 0 4px}
+  .num{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:10px;background:var(--amber-soft);color:var(--amber);font-weight:700;font-size:14px;margin-right:12px;border:1px solid rgba(240,196,143,.25)}
+  h2{font-size:24px;margin:0 0 6px;display:flex;align-items:center}
+  .lead{color:var(--dim);margin:0 0 22px;font-size:14px}
+  h3{font-size:17px;margin:28px 0 10px;color:var(--ink)}
+  p{color:var(--dim);margin:10px 0}
+  strong{color:var(--ink)} em{color:var(--amber);font-style:normal}
+  .tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:6px;margin:1px 4px 1px 0;font-weight:600}
+  .tag-new{background:var(--new-soft);color:#9fdcb0;border:1px solid rgba(103,148,75,.4)}
+  .tag-mod{background:var(--mod-soft);color:#ffc08a;border:1px solid rgba(232,137,78,.35)}
+  pre.tree{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px 22px;overflow-x:auto;font-family:"SF Mono",Menlo,Consolas,monospace;font-size:12.5px;line-height:1.85;color:var(--dim)}
+  pre.tree .new{color:#9fdcb0}
+  pre.tree .mod{color:#ffc08a}
+  pre.tree .com{color:var(--faint)}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+  th,td{padding:10px 13px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--amber);font-weight:600;background:var(--panel2);font-size:12.5px;letter-spacing:.04em}
+  td{color:var(--dim)} td:first-child{color:var(--ink);white-space:nowrap}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:14px 0}
+  .card h4{margin:0 0 6px;font-size:14.5px;color:var(--ink)}
+  .callout{border-radius:14px;padding:16px 18px;margin:16px 0;font-size:14.5px;display:flex;gap:10px;align-items:flex-start;border:1px solid}
+  .callout.green{background:rgba(88,179,104,.07);border-color:rgba(88,179,104,.3)}
+  .callout.amber{background:rgba(245,179,1,.07);border-color:rgba(245,179,1,.28)}
+  .callout p{margin:0;color:var(--ink)}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:680px){.grid{grid-template-columns:1fr}}
+  footer{padding:50px 0 80px;text-align:center;color:var(--faint);font-size:12.5px;border-top:1px solid var(--line);margin-top:50px}
+  ul{margin:8px 0;padding-left:0;list-style:none}
+  ul li{padding:5px 0 5px 22px;position:relative;color:var(--dim);font-size:14px}
+  ul li::before{content:"";position:absolute;left:8px;top:14px;width:6px;height:6px;border-radius:50%;background:var(--amber)}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="eyebrow">Merge Structure Report</p>
+    <h1>韧芽 · 前后端融合结构说明</h1>
+    <p class="sub">前端 heal-desk（场景/视觉主导）× 后端 WindFall（核心功能还原）合并后的最终项目结构，<strong>绿色标注 = 新增</strong>，<strong>橙色标注 = 修改</strong>。</p>
+    <div class="meta">
+      <span class="chip">前端主导：设计风格 / 主页场景</span>
+      <span class="chip">后端还原：三问复盘 / 聊天 / 画像 / 回收站 / 导出</span>
+      <span class="chip">2026-08-18</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<section id="summary">
+  <h2><span class="num">0</span>一句话总结</h2>
+  <div class="callout green"><p>✅ 合并完成且已在本地跑通：<strong>前端暗夜场景（皮）+ 后端完整核心功能（里）</strong>，14 个 API 端点 + 11 个核心功能组件 + <code>/history</code> 页全部就位，<code>tsc</code> 0 错误、<code>next build</code> 成功。</p></div>
+</section>
+
+<section id="structure">
+  <h2><span class="num">1</span>最终项目结构（<span class="tag tag-new">绿色=新增</span><span class="tag tag-mod">橙色=修改</span>）</h2>
+<pre class="tree">test-heal-app/
+├── <span class="mod">app/</span>
+│   ├── <span class="new">api/                              ← 新增：后端 14 个 API 端点</span>
+│   │   ├── <span class="new">ai/chat/route.ts</span>                <span class="com"># 多轮对话（情绪树洞）</span>
+│   │   ├── <span class="new">ai/chat/summary/route.ts</span>       <span class="com"># 对话归纳成三问+四指数草稿</span>
+│   │   ├── <span class="new">ai/reflect/route.ts</span>            <span class="com"># 三问「让 AI 帮我想想」</span>
+│   │   ├── <span class="new">analytics/overview|growth|growth-profile|emotions</span>
+│   │   ├── <span class="new">chats/route.ts · chats/[id]/route.ts</span>   <span class="com"># 聊天记录回溯</span>
+│   │   ├── <span class="new">diary/route.ts · diary/[id]/route.ts · diary/[id]/restore</span>
+│   │   ├── <span class="new">export/route.ts</span>                <span class="com"># 数据导出 md/json</span>
+│   │   └── <span class="new">profile/route.ts</span>               <span class="com"># Onboarding 画像</span>
+│   ├── <span class="new">history/page.tsx</span>                <span class="com">← 新增：过往记录页（成长画像/韧性/情绪色带/回收站/补三问/导出）</span>
+│   ├── <span class="mod">ai-analysis/page.tsx</span>           <span class="com">← 修改：占位页 → 完整聊天流程</span>
+│   ├── analysis/page.tsx                 <span class="com">（保留，数据已接真实后端）</span>
+│   ├── page.tsx                          <span class="com">（保留：夜房间场景）</span>
+│   └── <span class="mod">globals.css</span>                    <span class="com">← 修改：追加 WindFall 功能页样式（暖纸纸张层）</span>
+│
+├── <span class="mod">components/</span>
+│   ├── <span class="new">windfall/                        ← 新增：后端 11 个核心功能组件</span>
+│   │   ├── <span class="new">ReflectionFlow.tsx</span>           <span class="com"># 三问复盘（逐问 + AI 起头 + 四指数卡片）</span>
+│   │   ├── <span class="new">ChatWindow.tsx</span>               <span class="com"># 情绪树洞多轮聊天</span>
+│   │   ├── <span class="new">ChatSummaryCard.tsx</span>          <span class="com"># 聊完后的确认卡片（可编辑三问）</span>
+│   │   ├── <span class="new">ChatHistory.tsx</span>             <span class="com"># 聊天内容回溯</span>
+│   │   ├── <span class="new">GrowthProfile.tsx</span>           <span class="com"># 我的韧性画像（能力标签+行为模式）</span>
+│   │   ├── <span class="new">OverviewPanel.tsx</span>           <span class="com"># 个人全方面分析</span>
+│   │   ├── <span class="new">Onboarding.tsx</span>              <span class="com"># 首次进入 3 步画像（阶段/MBTI/陪伴偏好）</span>
+│   │   ├── <span class="new">ConfirmDialog.tsx</span>           <span class="com"># 自定义确认弹窗（替代 window.confirm）</span>
+│   │   ├── <span class="new">EmotionStrip.tsx</span>            <span class="com"># 30 天情绪色带</span>
+│   │   ├── <span class="new">GrowthChart.tsx</span>             <span class="com"># 韧性折线（区分已复盘/未复盘）</span>
+│   │   └── <span class="new">PaperStack.tsx</span>               <span class="com"># 纸堆（后端数据版）</span>
+│   ├── analysis/                         <span class="com">（保留）</span>
+│   │   ├── <span class="new">analytics-service.ts</span>        <span class="com">← 新增：分析页真实数据源（读后端，失败给空态）</span>
+│   │   └── <span class="mod">analysis-page.tsx</span>           <span class="com">← 修改：mock → 真实数据</span>
+│   ├── scene/                            <span class="com">（保留：夜房间场景组件）</span>
+│   │   └── <span class="mod">resilience-scene.tsx</span>        <span class="com">← 修改：接入 Onboarding + 纸堆→/history + 日记同步后端</span>
+│   └── ui-layer/                         <span class="com">（保留）</span>
+│       └── <span class="mod">top-navigation.tsx</span>           <span class="com">← 修改：「记录」→ /history</span>
+│
+├── <span class="mod">lib/</span>
+│   ├── <span class="new">types.ts · storage.ts · api.ts</span>          <span class="com">← 新增：类型契约 / 文件存储 / 前端数据层</span>
+│   ├── <span class="new">scores.ts</span>                        <span class="com"># 四指数规则评分引擎（韧性/自省/行动/成长）</span>
+│   ├── <span class="new">overview.ts · growthProfile.ts · reflection.ts</span>  <span class="com"># 全面分析/成长画像/三问生成</span>
+│   ├── <span class="new">emotions.ts · emotionAnalysis.ts</span>   <span class="com"># 12 情绪词表 / 关键词情绪识别</span>
+│   ├── <span class="new">historyContext.ts · localSummary.ts · date.ts · onboarding.ts</span>
+│   ├── <span class="new">emotion-map.ts</span>                   <span class="com">← 新增（本项目）：情绪 key 边界转换 lost↔confused</span>
+│   ├── <span class="new">backend-bridge.ts</span>                <span class="com">← 新增（本项目）：前端日记 → 后端镜像同步</span>
+│   └── utils.ts                          <span class="com">（保留）</span>
+│
+├── <span class="mod">.gitignore</span>                        <span class="com">← 修改：忽略 /data（后端文件存储）+ .DS_Store</span>
+├── <span class="new">MERGE_NOTES.md</span>                    <span class="com">← 新增：合并说明文档</span>
+└── package.json / next.config.mjs / tsconfig.json ...   <span class="com">（保留）</span></pre>
+</section>
+
+<section id="whats-new">
+  <h2><span class="num">2</span>重点：多了什么（按后端核心功能归类）</h2>
+  <table>
+    <tr><th>核心功能</th><th>新增的承载</th><th>入口（前端场景）</th></tr>
+    <tr><td>三问复盘</td><td><code>windfall/ReflectionFlow.tsx</code> + <code>api/ai/reflect</code></td><td>/history「补做三问」；聊天总结卡</td></tr>
+    <tr><td>情绪树洞聊天</td><td><code>windfall/ChatWindow.tsx</code> + <code>api/ai/chat</code></td><td>小熊 → /ai-analysis</td></tr>
+    <tr><td>聊天总结 → 保存</td><td><code>windfall/ChatSummaryCard.tsx</code> + <code>api/ai/chat/summary</code></td><td>聊天「聊完了帮我整理」</td></tr>
+    <tr><td>聊天记录回溯</td><td><code>windfall/ChatHistory.tsx</code> + <code>api/chats</code></td><td>/ai-analysis 下方（历史）</td></tr>
+    <tr><td>成长画像</td><td><code>windfall/GrowthProfile.tsx</code> + <code>api/analytics/growth-profile</code></td><td>/history 顶部</td></tr>
+    <tr><td>全面分析</td><td><code>windfall/OverviewPanel.tsx</code> + <code>api/analytics/overview</code></td><td>/analysis（数据层）+ /history</td></tr>
+    <tr><td>四指数评分</td><td><code>lib/scores.ts</code>（规则引擎）+ LLM（chat/summary）</td><td>三问卡片 / 聊天总结卡 / /history 详情</td></tr>
+    <tr><td>Onboarding 冷启动</td><td><code>windfall/Onboarding.tsx</code> + <code>api/profile</code></td><td>首次进入场景前</td></tr>
+    <tr><td>回收站 / 恢复 / 彻底删除</td><td><code>api/diary/[id]/restore</code> + <code>windfall/ConfirmDialog</code></td><td>/history「回收站」视图</td></tr>
+    <tr><td>数据导出</td><td><code>api/export</code>（md/json）</td><td>/history「导出备份」</td></tr>
+    <tr><td>韧性折线 / 情绪色带</td><td><code>windfall/GrowthChart.tsx</code> + <code>windfall/EmotionStrip.tsx</code></td><td>/history「我的变化」</td></tr>
+  </table>
+</section>
+
+<section id="mapping">
+  <h2><span class="num">3</span>前端场景对象 → 核心功能映射</h2>
+  <table>
+    <tr><th>场景对象</th><th>原来</th><th>合并后</th></tr>
+    <tr><td>打字机</td><td>写日记 → localStorage</td><td>写日记 → 同步后端（/history 可读）</td></tr>
+    <tr><td>小熊</td><td>占位页「小熊正在准备倾听」</td><td>完整情绪树洞聊天（多轮 → 总结 → 保存）</td></tr>
+    <tr><td>纸堆</td><td>localStorage 归档</td><td>/history（成长画像 + 回收站 + 补三问 + 导出）</td></tr>
+    <tr><td>唱片机</td><td>情绪选择 + 播放</td><td>不变（情绪选择 + 播放）</td></tr>
+    <tr><td>首次进入</td><td>无</td><td>Onboarding 3 步画像</td></tr>
+  </table>
+</section>
+
+<section id="notes">
+  <h2><span class="num">4</span>关键设计决策</h2>
+  <div class="grid">
+    <div class="card">
+      <h4>🎨 风格边界</h4>
+      <p>前端主导：暗夜房间场景、暖琥珀氛围、serif 字体。后端核心功能承载在「暖纸纸张层」（<code>#f1e8d4</code>），像暗夜房间里摊开的纸——与前端已有的 /analysis 页「暗夜+暖纸卡片」同一套审美逻辑。</p>
+    </div>
+    <div class="card">
+      <h4>🔗 情绪词表衔接</h4>
+      <p>前端用 <code>lost</code>，后端用 <code>confused</code>。新增 <code>lib/emotion-map.ts</code> 做边界转换，两端词表都不动。</p>
+    </div>
+    <div class="card">
+      <h4>⚡ Next 16 兼容</h4>
+      <p>WindFall 是 Next 14，本仓库是 Next 16（<code>params</code> 变为 Promise）。已修 3 个动态路由的异步 <code>params</code>。</p>
+    </div>
+    <div class="card">
+      <h4>💾 数据存储</h4>
+      <p>后端用文件存储（<code>data/*.json</code>，已 gitignore）。本地 <code>next dev</code> 可用；上线 Vercel 需换 DB（见 MERGE_NOTES.md P0）。</p>
+    </div>
+  </div>
+</section>
+
+<section id="run">
+  <h2><span class="num">5</span>本地运行</h2>
+  <div class="callout amber"><p><strong>已在运行：</strong><code>http://127.0.0.1:3010</code>（dev server）。验证结果：<code>/</code>、<code>/history</code>、<code>/ai-analysis</code>、<code>/analysis</code> 均 200，14 个 API 端点全部就绪。<br>重新启动：<code>cd ~/Downloads/test-heal-app &amp;&amp; npm run dev</code></p></div>
+  <p>AI 聊天需环境变量 <code>AI_BASE_URL</code> / <code>AI_API_KEY</code> / <code>AI_MODEL</code>；未配置时日记/复盘/画像（规则引擎）仍可用，仅聊天降级为友好提示。</p>
+</section>
+
+<section id="rollback">
+  <h2><span class="num">6</span>回滚点</h2>
+  <ul>
+    <li><strong>纯前端备份</strong>：<code>b967d8b</code>（合并前）—— <code>git reset --hard b967d8b</code></li>
+    <li><strong>后端并入（数据层）</strong>：<code>6128926</code></li>
+    <li><strong>核心功能完整还原（本次）</strong>：<code>88c0d31</code></li>
+  </ul>
+</section>
+
+</main>
+
+<footer>韧芽 · Resilience Sprout 前后端融合结构说明 · 生成于 2026-08-18 · Hermes Agent</footer>
+</body>
+</html>
