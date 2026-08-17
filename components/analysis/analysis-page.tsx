@@ -9,7 +9,7 @@ import type {
 import {
   getAnalyticsGrowth,
   getAnalyticsOverview,
-} from "./mock-analytics-service"
+} from "./analytics-service"
 import { OverviewPanel } from "./overview-panel"
 import { GrowthChart } from "./growth-chart"
 

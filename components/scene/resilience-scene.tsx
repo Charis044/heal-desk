@@ -20,6 +20,7 @@ import {
   type JournalRecord,
 } from "@/components/journal/journal-record"
 import { useVinylAudio } from "@/components/audio/audio-library"
+import { syncJournalToBackend } from "@/lib/backend-bridge"
 import type { EmotionId } from "./emotion-theme"
 
 /**
@@ -114,6 +115,9 @@ export function ResilienceScene() {
                 writeJournalRecords(nextRecords)
                 return nextRecords
               })
+
+              // 镜像到后端日记仓，供「成长分析」读取真实数据（尽力而为，失败不影响本地体验）
+              void syncJournalToBackend(pages, selectedEmotion)
 
               setEditingRecordId(null)
               setIsJournalOpen(false)
