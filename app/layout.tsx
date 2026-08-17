@@ -1,13 +1,6 @@
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
-import { Noto_Serif_SC } from 'next/font/google'
 import './globals.css'
-
-const notoSerifSC = Noto_Serif_SC({
-  subsets: ['latin'],
-  weight: ['400', '500'],
-  variable: '--font-noto-serif',
-})
 
 export const metadata: Metadata = {
   title: 'Resilience Sprout · 韧芽',
@@ -46,8 +39,8 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="zh" className={notoSerifSC.variable}>
-      <body className={`${notoSerifSC.className} antialiased`}>
+    <html lang="zh-CN">
+      <body className="antialiased">
         {children}
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>

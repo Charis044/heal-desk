@@ -4,44 +4,6 @@ import { useCallback, useEffect, useRef, useState } from "react"
 
 const VINYL_PLAYLIST = "/audio/vinyl/playlist.json"
 
-export const TYPEWRITER_SOUND = "/audio/typewriter-key.mp3"
-export const TYPEWRITER_RETURN_SOUND = "/audio/typewriter-return.mp3"
-
-const activeOneShotSounds = new Set<HTMLAudioElement>()
-
-function playOneShot(
-  source: string,
-  volume: number,
-  playbackRate = 1,
-) {
-  if (typeof window === "undefined") return
-
-  const sound = new Audio(source)
-  sound.preload = "auto"
-  sound.volume = volume
-  sound.playbackRate = playbackRate
-  activeOneShotSounds.add(sound)
-
-  const release = () => {
-    activeOneShotSounds.delete(sound)
-    sound.src = ""
-  }
-
-  sound.addEventListener("ended", release, { once: true })
-  sound.addEventListener("error", release, { once: true })
-  void sound.play().catch(release)
-}
-
-/** Every key gets an independent player, so rapid sounds freely overlap. */
-export function playTypewriterKey() {
-  playOneShot(TYPEWRITER_SOUND, 0.28, 0.96 + Math.random() * 0.08)
-}
-
-/** Plays for both an explicit Enter and an automatic visual line wrap. */
-export function playTypewriterReturn() {
-  playOneShot(TYPEWRITER_RETURN_SOUND, 0.38)
-}
-
 type VinylPlaylist = {
   tracks?: unknown
 }

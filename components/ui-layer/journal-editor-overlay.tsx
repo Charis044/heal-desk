@@ -15,9 +15,11 @@ import {
 } from "@/components/scene/emotion-theme"
 import type { JournalRecord } from "@/components/journal/journal-record"
 import {
+  installTypewriterAudioUnlock,
   playTypewriterKey,
   playTypewriterReturn,
-} from "@/components/audio/audio-library"
+  preloadTypewriterAudio,
+} from "@/components/audio/typewriter-audio"
 
 type JournalEditorOverlayProps = {
   open: boolean
@@ -114,6 +116,11 @@ export function JournalEditorOverlay({
   const theme = EMOTION_THEMES[activeEmotion]
   const sequence = record?.sequence ?? newSequence
   const entryDate = record ? new Date(record.createdAt) : new Date()
+
+  useEffect(() => {
+    void preloadTypewriterAudio()
+    return installTypewriterAudioUnlock()
+  }, [])
 
   const centerCaretGently = useCallback((textarea: HTMLTextAreaElement) => {
     const overlay = overlayRef.current

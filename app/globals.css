@@ -1,6 +1,18 @@
+@import '@fontsource/nunito/latin-400.css';
+@import '@fontsource/nunito/latin-500.css';
+@import '@fontsource/nunito/latin-600.css';
+@import '@fontsource/nunito/latin-700.css';
 @import 'tailwindcss';
 @import 'tw-animate-css';
 @import 'shadcn/tailwind.css';
+
+@font-face {
+  font-family: "Iansui";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url("/fonts/iansui-400.woff2") format("woff2");
+}
 
 @custom-variant dark (&:is(.dark *));
 
@@ -36,7 +48,8 @@
   --color-card: var(--card);
   --color-foreground: var(--foreground);
   --color-background: var(--background);
-  --font-serif: var(--font-noto-serif), "Noto Serif SC", ui-serif, Georgia, serif;
+  --font-sans: "Nunito", "Iansui", "Kaiti SC", "STKaiti", "KaiTi", "楷体", serif;
+  --font-serif: "Nunito", "Iansui", "Kaiti SC", "STKaiti", "KaiTi", "楷体", serif;
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -161,5 +174,8 @@
   html,
   body {
     @apply h-full overflow-hidden bg-[#141021] text-foreground;
+  }
+  body {
+    font-family: "Nunito", "Iansui", "Kaiti SC", "STKaiti", "KaiTi", "楷体", serif;
   }
 }

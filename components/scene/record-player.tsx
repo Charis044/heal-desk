@@ -105,8 +105,8 @@ export function RecordPlayer({
         aria-label={muted ? "开启背景音乐" : "静音背景音乐"}
         className="absolute z-30 flex items-center gap-1.5 rounded-full border border-white/30 bg-black/22 px-3 py-1.5 font-serif text-[12px] tracking-wide text-white/82 backdrop-blur-[6px] transition-[background-color,border-color,color,transform] hover:scale-[1.03] hover:border-white/50 hover:text-white"
         style={{
-          left: "32%",
-          top: "77%",
+          left: "40%",
+          top: "40%",
           transform: "translateX(-50%)",
         }}
       >

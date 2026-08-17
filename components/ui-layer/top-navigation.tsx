@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 
 const NAV_ITEMS = ["今日", "记录", "成长"] as const
 
@@ -8,6 +9,7 @@ const NAV_ITEMS = ["今日", "记录", "成长"] as const
  * Quiet top-right nav — text links, no rectangular buttons.
  */
 export function TopNavigation() {
+  const router = useRouter()
   const [active, setActive] = useState<(typeof NAV_ITEMS)[number]>("今日")
 
   return (
@@ -22,7 +24,10 @@ export function TopNavigation() {
             <li key={item}>
               <button
                 type="button"
-                onClick={() => setActive(item)}
+                onClick={() => {
+                  setActive(item)
+                  if (item === "成长") router.push("/analysis")
+                }}
                 className={[
                   "rounded-full px-2.5 py-1 font-serif text-[16px] tracking-wide transition-[opacity,transform,background-color,color] duration-300 ease-out [text-shadow:0_1px_10px_rgba(0,0,0,0.5)]",
                   "hover:scale-[1.015] hover:opacity-100",
