@@ -11,6 +11,7 @@ import type {
   SupportPreferenceKey,
   UserProfile,
 } from "@/lib/types";
+import { NightAtmosphere } from "@/components/ui-layer/night-atmosphere";
 import { useEffect, useState } from "react";
 
 interface OnboardingProps {
@@ -53,6 +54,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
   if (step === 3) {
     return (
       <div className="ob">
+        <NightAtmosphere intensity="overlay" />
         <div className="ob-inner ob-done">
           <p className="ob-eyebrow">RESILIENCE SPROUT</p>
           <h2 className="ob-done-title">好了，我大概认识你了。</h2>
@@ -66,6 +68,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
 
   return (
     <div className="ob">
+      <NightAtmosphere intensity="overlay" />
       <div className="ob-inner">
         <p className="ob-eyebrow">RESILIENCE SPROUT</p>
         <p className="ob-intro">第一次见面，让我简单认识一下你。</p>

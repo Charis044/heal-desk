@@ -9,8 +9,8 @@ import type {
   DiaryEntry,
   DiarySummary,
   EmotionsResponse,
-  GrowthProfile,
   GrowthResponse,
+  InsightsResponse,
   OverviewAnalysis,
   ReflectRequest,
   ReflectResponse,
@@ -115,10 +115,17 @@ export async function getEmotions(): Promise<EmotionsResponse> {
   return res.json();
 }
 
-/** 我的成长画像（GET /api/analytics/growth-profile） */
-export async function getGrowthProfile(): Promise<GrowthProfile> {
-  const res = await fetch("/api/analytics/growth-profile");
-  if (!res.ok) throw new Error(`getGrowthProfile failed: ${res.status}`);
+/** 左栏画像 / 折线快照 */
+export async function getInsights(): Promise<InsightsResponse> {
+  const res = await fetch("/api/analytics/insights");
+  if (!res.ok) throw new Error(`getInsights failed: ${res.status}`);
+  return res.json();
+}
+
+/** 立刻用当前未划掉笔记重算左栏 */
+export async function refreshInsights(): Promise<InsightsResponse> {
+  const res = await fetch("/api/analytics/insights", { method: "POST" });
+  if (!res.ok) throw new Error(`refreshInsights failed: ${res.status}`);
   return res.json();
 }
 
@@ -155,6 +162,20 @@ export async function saveChat(input: SaveChatInput): Promise<ChatRecord> {
     body: JSON.stringify(input),
   });
   if (!res.ok) throw new Error(`saveChat failed: ${res.status}`);
+  return res.json();
+}
+
+/** 更新一段已保存的聊天（PATCH /api/chats/:id） */
+export async function updateChat(
+  id: string,
+  input: SaveChatInput,
+): Promise<ChatRecord> {
+  const res = await fetch(`/api/chats/${id}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(input),
+  });
+  if (!res.ok) throw new Error(`updateChat failed: ${res.status}`);
   return res.json();
 }
 

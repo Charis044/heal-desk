@@ -1,5 +1,6 @@
 "use client";
 
+import { NightAtmosphere } from "@/components/ui-layer/night-atmosphere";
 import { requestReflectionSuggestion } from "@/lib/api";
 import { getEmotion } from "@/lib/emotions";
 import {
@@ -150,6 +151,7 @@ export default function ReflectionFlow({
 
   return (
     <div className="rflow" onClick={onClose}>
+      <NightAtmosphere intensity="overlay" />
       <div className="rflow-inner" onClick={(e) => e.stopPropagation()}>
         <button type="button" className="rflow-close" onClick={onClose}>
           返回

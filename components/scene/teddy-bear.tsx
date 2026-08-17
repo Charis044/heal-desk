@@ -10,7 +10,7 @@ export function TeddyBear() {
   return (
     <InteractiveObject
       src="/assets/comfort-bear.png?v=2"
-      alt="陪伴小熊——进入 AI 心理分析"
+      alt="陪伴小熊——针对一篇记录或一个具体问题的咨询"
       glowColor="rgba(244, 188, 120, 0.88)"
       rotate={-5}
       idleDelay={2.4}

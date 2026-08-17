@@ -31,6 +31,7 @@ export async function syncJournalToBackend(
         lesson: "",
         next_action: "",
         growth_evidence: "",
+        source: "handwritten",
       }),
     })
   } catch {

@@ -60,11 +60,23 @@ export interface ScoreDetail {
   note: string;
 }
 
+/** 笔记来源：打字机手写 vs 小熊咨询压缩稿 */
+export type DiarySource = "handwritten" | "bear";
+
 /** 一条日记记录（POST /api/diary 的返回结构） */
 export interface DiaryEntry {
   id: string;
   emotion: EmotionKey;
   content: string;
+  /** 缺省视为 handwritten */
+  source?: DiarySource;
+  /**
+   * 划掉：不从列表移除，全文删除线。
+   * 仅表示不在总结 / 图表中读取，可以反悔取消。
+   */
+  excluded_from_insights?: boolean;
+  /** 小熊咨询对应的完整对话 id，点回去用 */
+  chat_id?: string | null;
   lesson: string;
   next_action: string;
   growth_evidence: string;
@@ -111,6 +123,8 @@ export interface CreateDiaryInput {
   score_reasons?: ScoreReasons;
   /** 可选：LLM 产出的 AI 复盘回应；缺省时后端用模板 */
   ai_response?: string;
+  source?: DiarySource;
+  chat_id?: string | null;
 }
 
 /** 补做三问 / 编辑记录的请求体（PATCH /api/diary/:id，字段按需传，缺省不覆盖） */
@@ -122,6 +136,8 @@ export interface UpdateDiaryInput {
   content?: string;
   /** 编辑情绪 */
   emotion?: EmotionKey;
+  /** 划掉 / 取消划掉（不进总结与图表） */
+  excluded_from_insights?: boolean;
 }
 
 // ============================================================
@@ -226,7 +242,7 @@ export interface ChatListItem {
   message_count: number;
 }
 
-/** 保存聊天记录的请求体（POST /api/chats） */
+/** 保存 / 更新一段聊天记录的请求体（POST /api/chats，PATCH /api/chats/:id） */
 export interface SaveChatInput {
   messages: ChatMessage[];
   context?: string;
@@ -280,15 +296,36 @@ export interface DiarySummary {
   created_at: string;
   /** 软删除时间（回收站列表用；非回收站记录为 null） */
   deleted_at?: string | null;
+  source?: DiarySource;
+  excluded_from_insights?: boolean;
+  chat_id?: string | null;
 }
 
-/** 韧性变化点（GET /api/analytics/growth） */
+/** 韧性变化点：一篇笔记一个点（刷新左栏时才重画） */
 export interface GrowthPoint {
   /** YYYY-MM-DD */
   date: string;
   score: number;
-  /** 是否做过三问复盘（false = 未复盘节点，score 为 0，图上用空心点标注） */
+  /** 对应笔记 id（同一天多篇时用来区分） */
+  id?: string;
+  /** 是否做过三问复盘（历史兼容；左栏快照里每篇都画实心点） */
   reflected?: boolean;
+}
+
+/** 左栏画像 / 折线快照：只在 7 的倍数或手动刷新时重算 */
+export interface InsightsSnapshot {
+  included_ids: string[];
+  included_count: number;
+  computed_at: string;
+  profile: GrowthProfile;
+  growth: GrowthPoint[];
+}
+
+/** GET /api/analytics/insights */
+export interface InsightsResponse {
+  snapshot: InsightsSnapshot | null;
+  pending_count: number;
+  countable_count: number;
 }
 
 export interface GrowthResponse {

@@ -142,13 +142,14 @@ export function buildGrowthProfile(
       : "",
   };
 
-  // 只统计「做过三问反思」的记录（有成长信号）
+  // 只统计传入集合（调用方已筛掉划掉 / 回收站）
   const reflected = ordered.filter(
     (e) =>
       e.lesson?.trim() ||
       e.next_action?.trim() ||
       e.growth_evidence?.trim() ||
-      e.growth_area
+      e.growth_area ||
+      e.content?.trim(),
   );
   if (reflected.length === 0) return profile;
 
@@ -173,6 +174,14 @@ export function buildGrowthProfile(
     label,
     note: AREA_NOTES[label] ?? "你正在一点点改变。",
   }));
+  if (profile.strengths.length === 0 && ordered.length > 0) {
+    profile.strengths = [
+      {
+        label: "持续记录",
+        note: `这些日子里你写下了 ${ordered.length} 篇。变化不一定快，但它在被看见。`,
+      },
+    ];
+  }
 
   // —— patterns：按情绪聚合，只在「确有成长」时生成「过去 → 现在」 ——
   const byEmotion = new Map<EmotionKey, DiaryEntry[]>();

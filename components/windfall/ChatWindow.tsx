@@ -1,22 +1,22 @@
 "use client";
 
-import { saveChat, sendChatMessage, summarizeChat } from "@/lib/api";
+import { getChat, sendChatMessage, summarizeChat } from "@/lib/api";
 import { buildLocalSummary } from "@/lib/localSummary";
 import type { ChatMessage, ChatSummaryResponse } from "@/lib/types";
 import { useEffect, useRef, useState } from "react";
 
 interface ChatWindowProps {
-  /** 用户在打字机纸条上写的「今天发生了什么」，作为聊天背景 */
-  context?: string;
-  /** 递增信号：用户点「去聊聊」时触发 AI 主动开场 */
-  startSignal?: number;
-  onSummary: (summary: ChatSummaryResponse) => void;
+  chatId?: string;
+  onFinish: (payload: {
+    summary: ChatSummaryResponse;
+    messages: ChatMessage[];
+  }) => Promise<void> | void;
 }
 
-const WELCOME = "今天过得怎么样？想到什么就说什么，我在这儿听。";
+const HINT =
+  "可以说一篇记录、某一天、某几天、某段时间，或一个具体问题。想问得越具体，我越能一起看清楚。";
 const STORAGE_KEY = "renya-chat-messages";
 
-/** 从 sessionStorage 恢复聊天（刷新不丢；关标签页即清空） */
 function loadSavedMessages(): ChatMessage[] {
   if (typeof window === "undefined") return [];
   try {
@@ -30,70 +30,56 @@ function loadSavedMessages(): ChatMessage[] {
 }
 
 /**
- * 聊天窗口：取代「打字机 + 树洞」。
- * AI 前期是被动的「心理咨询师」式倾听，用户愿意说时才慢慢深入。
- * 聊多久都行，随时点「聊完了，帮我整理」。
+ * 小熊咨询：不预读笔记。空输入时浅灰提示范围；用户开口后提示消失。
+ * 聊完压缩成一篇，完整对话留在小熊里。
  */
-export default function ChatWindow({
-  context,
-  startSignal,
-  onSummary,
-}: ChatWindowProps) {
-  const [messages, setMessages] = useState<ChatMessage[]>(() => {
-    const saved = loadSavedMessages();
-    return saved.length > 0 ? saved : [{ role: "assistant", content: WELCOME }];
-  });
+export default function ChatWindow({ chatId, onFinish }: ChatWindowProps) {
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [ready, setReady] = useState(!chatId);
   const [input, setInput] = useState("");
   const [sending, setSending] = useState(false);
   const [summarizing, setSummarizing] = useState(false);
   const [error, setError] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const savedRef = useRef(false);
+
+  useEffect(() => {
+    if (!chatId) {
+      setMessages(loadSavedMessages());
+      setReady(true);
+      return;
+    }
+    let alive = true;
+    getChat(chatId)
+      .then((c) => {
+        if (alive) setMessages(c.messages);
+      })
+      .catch(() => {
+        if (alive) setMessages([]);
+      })
+      .finally(() => {
+        if (alive) setReady(true);
+      });
+    return () => {
+      alive = false;
+    };
+  }, [chatId]);
 
   useEffect(() => {
     const el = scrollRef.current;
     if (el) el.scrollTo({ top: el.scrollHeight, behavior: "smooth" });
   }, [messages, sending]);
 
-  // 持久化聊天：刷新不丢
   useEffect(() => {
+    if (chatId) return;
     try {
       sessionStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
     } catch {
       /* ignore */
     }
-  }, [messages]);
+  }, [chatId, messages]);
 
-  // 用户点「去聊聊」时，把打字机写的内容作为对话的第一句展示，
-  // 再让 AI 基于它主动接话。这样「写的内容」真正成为聊天的一部分。
-  useEffect(() => {
-    if (!startSignal || startSignal === 0) return;
-    if (!context?.trim()) return;
-    let alive = true;
-    setSending(true);
-    setError(false);
-    // 先把纸条内容作为对话第一句（用户自己说的那句话）
-    setMessages([{ role: "user", content: context.trim() }]);
-    sendChatMessage({ messages: [], context, opening: true })
-      .then((r) => {
-        if (!alive) return;
-        setMessages((prev) => [
-          ...prev,
-          { role: "assistant", content: r.reply },
-        ]);
-      })
-      .catch(() => {
-        if (!alive) return;
-        setError(true);
-      })
-      .finally(() => {
-        if (alive) setSending(false);
-      });
-    return () => {
-      alive = false;
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [startSignal]);
+  const hasUserMsg = messages.some((m) => m.role === "user");
+  const showHint = ready && !hasUserMsg;
 
   const send = async () => {
     const text = input.trim();
@@ -104,7 +90,7 @@ export default function ChatWindow({
     setMessages(next);
     setSending(true);
     try {
-      const r = await sendChatMessage({ messages: next, context });
+      const r = await sendChatMessage({ messages: next });
       setMessages((prev) => [
         ...prev,
         { role: "assistant", content: r.reply },
@@ -113,7 +99,10 @@ export default function ChatWindow({
       setError(true);
       setMessages((prev) => [
         ...prev,
-        { role: "assistant", content: "……好像断了一下。你可以再慢慢说，我还在听。" },
+        {
+          role: "assistant",
+          content: "……好像断了一下。你再说一次范围或问题，我还在。",
+        },
       ]);
     } finally {
       setSending(false);
@@ -126,30 +115,32 @@ export default function ChatWindow({
     setError(false);
     let summary: ChatSummaryResponse;
     try {
-      summary = await summarizeChat({ messages, context });
+      summary = await summarizeChat({ messages });
     } catch {
-      // AI 不可用：降级到本地规则归纳，仍走「确认卡」流程，不中断用户
-      summary = buildLocalSummary(context, messages);
+      summary = buildLocalSummary(undefined, messages);
     }
-    // 保存这段聊天到「聊天内容回溯」（同一段只存一次，失败不影响主流程）
-    if (!savedRef.current && hasUserMsg) {
-      savedRef.current = true;
-      saveChat({
-        messages,
-        context,
-        emotion: summary.emotion,
-        content: summary.content,
-      }).catch(() => {});
+    try {
+      await onFinish({ summary, messages });
+      if (!chatId) {
+        try {
+          sessionStorage.removeItem(STORAGE_KEY);
+        } catch {
+          /* ignore */
+        }
+      }
+    } finally {
+      setSummarizing(false);
     }
-    onSummary(summary);
-    setSummarizing(false);
   };
-
-  const hasUserMsg = messages.some((m) => m.role === "user");
 
   return (
     <div className="chat">
       <div className="chat-scroll" ref={scrollRef}>
+        {showHint && (
+          <p className="chat-watermark" aria-hidden>
+            {HINT}
+          </p>
+        )}
         {messages.map((m, i) => (
           <div
             key={i}
@@ -184,8 +175,8 @@ export default function ChatWindow({
               send();
             }
           }}
-          placeholder="想说点什么……"
-          disabled={sending || summarizing}
+          placeholder={showHint ? "" : "继续说……"}
+          disabled={sending || summarizing || !ready}
         />
         <button
           type="button"
@@ -204,13 +195,13 @@ export default function ChatWindow({
           onClick={finish}
           disabled={summarizing}
         >
-          {summarizing ? "正在整理……" : "聊完了，帮我整理"}
+          {summarizing ? "正在记下……" : "聊完了，帮我记下"}
         </button>
       )}
 
       {error && (
         <p className="chat-error">
-          AI 暂时连不上。你可以稍后重试，或直接点「聊完了，帮我整理」——我会用简单方式帮你保存。
+          AI 暂时连不上。你可以稍后重试，或直接点「聊完了，帮我记下」。
         </p>
       )}
     </div>

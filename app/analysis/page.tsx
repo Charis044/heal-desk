@@ -1,11 +1,6 @@
-import type { Metadata } from "next"
-import { AnalysisPage } from "@/components/analysis/analysis-page"
+import { redirect } from "next/navigation"
 
-export const metadata: Metadata = {
-  title: "我的变化 · 韧芽",
-  description: "回看近期的情绪线索、行为变化与韧性轨迹。",
-}
-
+/** 成长页已并入纸叠（/history），旧地址转到记录页。 */
 export default function Page() {
-  return <AnalysisPage />
+  redirect("/history")
 }

@@ -55,6 +55,23 @@ export async function PATCH(
 
   const current = entries[idx];
 
+  if (
+    body.excluded_from_insights !== undefined &&
+    body.lesson === undefined &&
+    body.next_action === undefined &&
+    body.growth_evidence === undefined &&
+    body.content === undefined &&
+    body.emotion === undefined
+  ) {
+    const updated: DiaryEntry = {
+      ...current,
+      excluded_from_insights: body.excluded_from_insights,
+    };
+    entries[idx] = updated;
+    await saveEntries(entries);
+    return NextResponse.json(updated);
+  }
+
   // 合并：未传字段保留原值（允许把三问显式清空）
   const lesson = body.lesson !== undefined ? body.lesson : current.lesson;
   const next_action =

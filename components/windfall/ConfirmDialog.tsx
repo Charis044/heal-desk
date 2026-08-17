@@ -29,9 +29,21 @@ export default function ConfirmDialog({
   return (
     <div className="confirm-overlay" onClick={onCancel} role="dialog" aria-modal="true">
       <div className="confirm-dialog" onClick={(e) => e.stopPropagation()}>
-        <h3 className="confirm-title">{title}</h3>
-        <p className="confirm-message">{message}</p>
-        <div className="confirm-actions">
+        <img
+          src="/assets/scrap/tape-washi.png"
+          alt=""
+          draggable={false}
+          className="pointer-events-none absolute -top-2 left-2 z-[1] h-5 w-12 object-cover object-top select-none mix-blend-multiply"
+        />
+        <img
+          src="/assets/scrap/tape-washi.png"
+          alt=""
+          draggable={false}
+          className="pointer-events-none absolute -top-2 right-2 z-[1] h-5 w-12 -scale-x-100 object-cover object-top select-none mix-blend-multiply"
+        />
+        <h3 className="relative z-10 confirm-title">{title}</h3>
+        <p className="relative z-10 confirm-message">{message}</p>
+        <div className="relative z-10 confirm-actions">
           <button type="button" className="btn-ghost" onClick={onCancel}>
             {cancelText}
           </button>

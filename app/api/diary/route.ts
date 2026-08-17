@@ -1,6 +1,7 @@
 import {
   clearProfile,
   cleanupTrash,
+  clearInsightsSnapshot,
   loadEntries,
   saveChats,
   saveEntries,
@@ -10,6 +11,7 @@ import {
   buildReflectionResponse,
 } from "@/lib/reflection";
 import { computeScoreDetail, type GrowthHistory } from "@/lib/scores";
+import { maybeAutoRefreshInsights } from "@/lib/insightsRefresh";
 import type {
   CreateDiaryInput,
   DiaryEntry,
@@ -78,6 +80,9 @@ export async function GET(req: Request) {
     has_reflection: !!(e.lesson || e.next_action || e.growth_evidence),
     created_at: e.created_at,
     deleted_at: e.deleted_at ?? null,
+    source: e.source ?? "handwritten",
+    excluded_from_insights: !!e.excluded_from_insights,
+    chat_id: e.chat_id ?? null,
   }));
 
   return NextResponse.json(summaries);
@@ -153,11 +158,14 @@ export async function POST(req: Request) {
     growth_area: findings.growth_area,
     score_source: scoreDetail.source,
     score_reasons: scoreDetail.reasons,
+    source: body.source ?? "handwritten",
+    chat_id: body.chat_id ?? null,
     created_at: new Date().toISOString(),
   };
 
   entries.unshift(entry);
   await saveEntries(entries);
+  await maybeAutoRefreshInsights();
 
   return NextResponse.json(entry, { status: 201 });
 }
@@ -173,5 +181,6 @@ export async function DELETE() {
   await saveEntries([]);
   await saveChats([]);
   await clearProfile();
+  await clearInsightsSnapshot();
   return NextResponse.json({ ok: true });
 }

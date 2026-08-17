@@ -1,6 +1,6 @@
 import { promises as fs } from "fs";
 import path from "path";
-import type { ChatRecord, DiaryEntry, UserProfile } from "./types";
+import type { ChatRecord, DiaryEntry, InsightsSnapshot, UserProfile } from "./types";
 
 /**
  * 文件持久化存储（仅服务端使用）。
@@ -20,6 +20,7 @@ const TMP_FILE = DATA_FILE + ".tmp";
 const PROFILE_FILE = path.join(DATA_DIR, "profile.json");
 const CHATS_FILE = path.join(DATA_DIR, "chats.json");
 const CHATS_TMP = CHATS_FILE + ".tmp";
+const INSIGHTS_FILE = path.join(DATA_DIR, "insights-snapshot.json");
 
 // 写操作串行化：避免并发请求互相覆盖
 let writeChain: Promise<void> = Promise.resolve();
@@ -109,6 +110,38 @@ export async function saveChats(chats: ChatRecord[]): Promise<void> {
       await fs.rename(CHATS_TMP, CHATS_FILE);
     });
   await chatWriteChain;
+}
+
+/** 读取左栏画像 / 折线快照；没有则返回 null */
+export async function loadInsightsSnapshot(): Promise<InsightsSnapshot | null> {
+  await fs.mkdir(DATA_DIR, { recursive: true });
+  try {
+    const raw = await fs.readFile(INSIGHTS_FILE, "utf8");
+    if (!raw.trim()) return null;
+    const data = JSON.parse(raw) as InsightsSnapshot;
+    if (!data || !Array.isArray(data.included_ids)) return null;
+    return data;
+  } catch {
+    return null;
+  }
+}
+
+/** 保存左栏快照 */
+export async function saveInsightsSnapshot(
+  snapshot: InsightsSnapshot,
+): Promise<void> {
+  await fs.mkdir(DATA_DIR, { recursive: true });
+  await fs.writeFile(INSIGHTS_FILE, JSON.stringify(snapshot, null, 2), "utf8");
+}
+
+/** 清空左栏快照 */
+export async function clearInsightsSnapshot(): Promise<void> {
+  await fs.mkdir(DATA_DIR, { recursive: true });
+  try {
+    await fs.unlink(INSIGHTS_FILE);
+  } catch {
+    /* 文件不存在即可 */
+  }
 }
 
 // ============================================================

@@ -20,7 +20,7 @@ export default function GrowthChart({ items }: GrowthChartProps) {
   if (items.length === 0) {
     return (
       <p className="py-8 text-center text-[0.85rem] text-[#9a8b78]">
-        完成几次三问反思后，这里会慢慢长出一条属于你的线。
+        写下几篇、刷新左栏之后，这里会慢慢长出一条属于你的线。
       </p>
     );
   }

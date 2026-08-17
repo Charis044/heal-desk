@@ -1,5 +1,6 @@
 "use client";
 
+import { NightAtmosphere } from "@/components/ui-layer/night-atmosphere";
 import { EMOTIONS, getEmotion } from "@/lib/emotions";
 import { computeScoreDetail, levelOf } from "@/lib/scores";
 import type {
@@ -96,6 +97,7 @@ export default function ChatSummaryCard({
 
   return (
     <div className="draft" onClick={onBack}>
+      <NightAtmosphere intensity="overlay" />
       <div className="draft-inner" onClick={(e) => e.stopPropagation()}>
         <button type="button" className="draft-close" onClick={onBack}>
           返回聊天

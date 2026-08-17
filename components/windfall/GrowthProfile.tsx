@@ -17,9 +17,9 @@ export default function GrowthProfileView({
 }: GrowthProfileProps) {
   if (loading) {
     return (
-      <section className="mt-10">
+      <section>
         <h2 className="section-title">我的韧性画像</h2>
-        <div className="paper-card mt-6 rounded-xl p-6 text-center text-[0.9rem] text-[#9a8b78]">
+        <div className="paper-inset mt-6 p-6 text-center font-serif text-[0.9rem] text-[#9a8b78]">
           正在翻看你写下的这些日子……
         </div>
       </section>
@@ -34,14 +34,14 @@ export default function GrowthProfileView({
     profile.strengths.length === 0 && profile.patterns.length === 0;
 
   return (
-    <section className="mt-10">
+    <section>
       <h2 className="section-title">我的韧性画像</h2>
       <p className="mt-2 text-[0.9rem] text-[#8a7156]">
         最近的你，正在发生什么变化？
       </p>
 
       {empty && (
-        <div className="paper-card mt-5 rounded-xl p-8 text-center text-[0.9rem] text-[#9a8b78]">
+        <div className="paper-inset mt-5 p-8 text-center font-serif text-[0.9rem] text-[#9a8b78]">
           记录得多了，这里会慢慢显出你自己都没注意到的变化。
         </div>
       )}
@@ -50,7 +50,7 @@ export default function GrowthProfileView({
       {profile.strengths.length > 0 && (
         <div className="mt-5 space-y-3">
           {profile.strengths.map((s) => (
-            <div key={s.label} className="paper-card gprof-insight rounded-xl p-5">
+            <div key={s.label} className="paper-inset gprof-insight p-5">
               <div className="flex items-start gap-3">
                 <span className="gprof-dna" aria-hidden>
                   🧬
@@ -90,7 +90,7 @@ export default function GrowthProfileView({
 
           <div className="mt-4 space-y-4">
             {profile.patterns.map((p, i) => (
-              <div key={i} className="paper-card rounded-xl p-5">
+              <div key={i} className="paper-inset p-5">
                 <p className="gprof-trigger">{p.trigger}</p>
 
                 <div className="mt-3 grid gap-3 sm:grid-cols-2">

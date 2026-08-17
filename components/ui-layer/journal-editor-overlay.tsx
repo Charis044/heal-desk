@@ -422,9 +422,9 @@ export function JournalEditorOverlay({
                     pageIndex === 0
                       ? "polygon(148px 0, 100% 0, 100% 100%, 0 100%, 0 58px)"
                       : undefined,
-                  backgroundColor: "#e8ded0",
+                  backgroundColor: "#efe6d6",
                   backgroundImage:
-                    "url('/assets/journal-paper-texture.png')",
+                    "linear-gradient(165deg, rgba(255,252,246,0.5), rgba(245,234,216,0.3)), url('/assets/papers/lined.png')",
                   backgroundRepeat: "no-repeat",
                   backgroundPosition: "center",
                   backgroundSize: "cover",
@@ -445,7 +445,7 @@ export function JournalEditorOverlay({
                       clipPath: "polygon(100% 0, 100% 100%, 0 100%)",
                       backgroundColor: "#d1c1ad",
                       backgroundImage:
-                        "linear-gradient(154deg, rgba(255,255,255,0.5), rgba(88,65,46,0.18)), url('/assets/journal-paper-texture.png')",
+                        "linear-gradient(154deg, rgba(255,255,255,0.5), rgba(88,65,46,0.18)), url('/assets/papers/lined.png')",
                       backgroundPosition: "top left",
                       backgroundSize: "720px auto",
                       borderRight: "1px solid rgba(68,49,36,0.2)",

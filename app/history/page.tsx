@@ -1,7 +1,9 @@
 "use client";
 
+import { FunctionPageHeader } from "@/components/ui-layer/function-page-header";
+import { NightAtmosphere } from "@/components/ui-layer/night-atmosphere";
+import { PaperSheet } from "@/components/ui-layer/paper-sheet";
 import ConfirmDialog from "@/components/windfall/ConfirmDialog";
-import EmotionStrip from "@/components/windfall/EmotionStrip";
 import GrowthChart from "@/components/windfall/GrowthChart";
 import GrowthProfileView from "@/components/windfall/GrowthProfile";
 import ReflectionFlow, {
@@ -10,10 +12,9 @@ import ReflectionFlow, {
 import {
   deleteDiary,
   getDiary,
-  getEmotions,
-  getGrowth,
-  getGrowthProfile,
+  getInsights,
   listDiary,
+  refreshInsights,
   restoreDiary,
   updateDiary,
 } from "@/lib/api";
@@ -22,11 +23,8 @@ import type {
   DiaryEntry,
   DiarySummary,
   EmotionKey,
-  EmotionPoint,
-  GrowthPoint,
-  GrowthProfile,
+  InsightsResponse,
 } from "@/lib/types";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 
 const PAGE = 20;
@@ -49,10 +47,9 @@ export default function HistoryPage() {
   const [detail, setDetail] = useState<DiaryEntry | null>(null);
   const [detailLoading, setDetailLoading] = useState(false);
 
-  const [growth, setGrowth] = useState<GrowthPoint[]>([]);
-  const [emotions, setEmotions] = useState<EmotionPoint[]>([]);
-  const [profile, setProfile] = useState<GrowthProfile | null>(null);
-  const [profileLoading, setProfileLoading] = useState(true);
+  const [insights, setInsights] = useState<InsightsResponse | null>(null);
+  const [insightsLoading, setInsightsLoading] = useState(true);
+  const [insightsRefreshing, setInsightsRefreshing] = useState(false);
 
   // 补做三问：目标记录
   const [reflectionFor, setReflectionFor] = useState<{
@@ -118,19 +115,33 @@ export default function HistoryPage() {
     };
   }, [q, emotionFilter, view]);
 
-  // 画像 / 折线 / 色带（仅加载一次）
+  // 左栏快照（7 的倍数或手动刷新才变）
   useEffect(() => {
-    getGrowth()
-      .then((r) => setGrowth(r.items))
-      .catch(() => {});
-    getEmotions()
-      .then((r) => setEmotions(r.items))
-      .catch(() => {});
-    getGrowthProfile()
-      .then((r) => setProfile(r))
+    let alive = true;
+    getInsights()
+      .then((r) => {
+        if (alive) setInsights(r);
+      })
       .catch(() => {})
-      .finally(() => setProfileLoading(false));
+      .finally(() => {
+        if (alive) setInsightsLoading(false);
+      });
+    return () => {
+      alive = false;
+    };
   }, []);
+
+  const reloadInsights = async () => {
+    setInsightsRefreshing(true);
+    try {
+      const r = await refreshInsights();
+      setInsights(r);
+    } catch {
+      /* 静默 */
+    } finally {
+      setInsightsRefreshing(false);
+    }
+  };
 
   const toggleExpand = async (id: string) => {
     if (expandedId === id) {
@@ -198,11 +209,22 @@ export default function HistoryPage() {
     setConfirmDeleteId(id);
   };
 
-  // 删除/恢复后刷新画像、折线、色带
-  const refreshInsights = () => {
-    getGrowth().then((r) => setGrowth(r.items)).catch(() => {});
-    getEmotions().then((r) => setEmotions(r.items)).catch(() => {});
-    getGrowthProfile().then((r) => setProfile(r)).catch(() => {});
+  const toggleExclude = async (id: string, excluded: boolean) => {
+    try {
+      const updated = await updateDiary(id, {
+        excluded_from_insights: excluded,
+      });
+      setSummaries((prev) =>
+        prev.map((s) =>
+          s.id === id
+            ? { ...s, excluded_from_insights: updated.excluded_from_insights }
+            : s
+        )
+      );
+      if (detail?.id === id) setDetail(updated);
+    } catch {
+      /* 静默 */
+    }
   };
 
   // 确认软删除
@@ -217,7 +239,6 @@ export default function HistoryPage() {
         setExpandedId(null);
         setDetail(null);
       }
-      refreshInsights();
     } catch {
       /* 静默 */
     }
@@ -228,7 +249,6 @@ export default function HistoryPage() {
     try {
       await restoreDiary(id);
       setSummaries((prev) => prev.filter((s) => s.id !== id));
-      refreshInsights();
     } catch {
       /* 静默 */
     }
@@ -247,7 +267,6 @@ export default function HistoryPage() {
     try {
       await deleteDiary(id, true);
       setSummaries((prev) => prev.filter((s) => s.id !== id));
-      refreshInsights();
     } catch {
       /* 静默 */
     }
@@ -287,8 +306,6 @@ export default function HistoryPage() {
         )
       );
       cancelEdit();
-      getGrowth().then((r) => setGrowth(r.items)).catch(() => {});
-      getEmotions().then((r) => setEmotions(r.items)).catch(() => {});
     } catch {
       /* 静默 */
     }
@@ -296,75 +313,74 @@ export default function HistoryPage() {
 
   return (
     <>
-      <main className="mx-auto h-[100dvh] max-w-3xl overflow-y-auto bg-[#f1e8d4] px-5 pb-20 pt-10">
-      {/* 顶部 */}
-      <header>
-        <p className="eyebrow">RESILIENCE SPROUT</p>
-        <div className="mt-2 flex items-end justify-between gap-4">
-          <h1 className="text-2xl font-bold leading-snug text-[#3b3028] sm:text-[1.7rem]">
-            翻开过去保存下来的自己，
-            <br className="sm:hidden" />
-            看看你什么时候开始变得不一样。
-          </h1>
-          <Link
-            href="/"
-            className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-[rgba(90,61,43,0.24)] px-4 py-2 text-[0.9rem] font-semibold text-[#6b5d4f] transition-colors hover:bg-[rgba(90,61,43,0.06)]"
-          >
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-              <path
-                d="M10 3L5 8l5 5"
-                stroke="currentColor"
-                strokeWidth="1.6"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-            回到首页
-          </Link>
-        </div>
+      <main className="relative h-[100dvh] overflow-y-auto bg-[#141021] text-[#fff8ee]">
+      <NightAtmosphere />
+      <FunctionPageHeader className="max-w-[1180px]" />
+
+      <div className="relative z-10 mx-auto w-full max-w-[1180px] px-4 pb-20 sm:px-6">
+      <header className="mb-8">
+        <p className="font-serif text-[11px] tracking-[0.28em] text-[#f0c48f]/72">
+          PAST PAGES · 过往记录
+        </p>
+        <h1 className="mt-3 font-serif text-2xl font-medium leading-snug tracking-[0.04em] text-[#fff8ee] sm:text-[1.75rem]">
+          翻开过去保存下来的自己，
+          <br className="sm:hidden" />
+          看看你什么时候开始变得不一样。
+        </h1>
       </header>
 
-      {/* 我的韧性画像：AI 总结的变化（顶部） */}
-      <GrowthProfileView profile={profile} loading={profileLoading} />
-
-      {/* 我的变化：韧性折线 + 情绪色带（辅助，非 Dashboard） */}
-      <section className="mt-14">
-        <h2 className="section-title">我的变化</h2>
-
-        <p className="mt-3 text-[0.95rem] leading-relaxed text-[#5a4030]">
-          韧性不是不再受伤，而是受伤之后越来越知道怎么面对。
-        </p>
-
-        <div className="paper-card mt-5 rounded-xl p-5 sm:p-6">
-          <p className="text-[0.82rem] font-semibold text-[#8a7156]">
-            韧性变化
+      <div className="history-split">
+      <PaperSheet variant="notebook" className="min-h-[640px]">
+        <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
+          <p className="font-serif text-[10px] tracking-[0.22em] text-[#5c4739]/55">
+            每 7 篇更新一次左栏
           </p>
-          <div className="mt-2">
-            <GrowthChart items={growth} />
-          </div>
+          <button
+            type="button"
+            className="btn-ghost"
+            onClick={reloadInsights}
+            disabled={insightsRefreshing}
+          >
+            {insightsRefreshing ? "正在重画……" : "立刻刷新左栏"}
+          </button>
         </div>
-
-        <div className="paper-card mt-5 rounded-xl p-5 sm:p-6">
-          <p className="text-[0.82rem] font-semibold text-[#8a7156]">
-            最近 30 天的情绪
+        {!insightsLoading && (insights?.pending_count ?? 0) > 0 && (
+          <p className="mb-5 font-serif text-[0.88rem] leading-relaxed text-[#8a7156]">
+            还有 {insights?.pending_count} 篇尚未计入。
           </p>
-          <div className="mt-3">
-            <EmotionStrip items={emotions} />
+        )}
+        <GrowthProfileView
+          profile={insights?.snapshot?.profile ?? null}
+          loading={insightsLoading}
+        />
+        <section className="mt-10">
+          <h2 className="section-title">我的变化</h2>
+          <p className="mt-3 font-serif text-[0.95rem] leading-relaxed text-[#5a4030]/86">
+            韧性不是不再受伤，而是受伤之后越来越知道怎么面对。
+          </p>
+          <div className="paper-inset mt-5 p-5 sm:p-6">
+            <p className="text-[10px] tracking-[0.22em] text-[#5c4739]/55">
+              韧性变化
+            </p>
+            <div className="mt-2">
+              <GrowthChart items={insights?.snapshot?.growth ?? []} />
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </PaperSheet>
 
-      {/* 过往记录：纸堆（保留原有交互） */}
-      <section className="mt-14">
+      <section>
         <div className="flex items-center justify-between gap-4">
-          <h2 className="section-title">过往记录</h2>
-          <div className="flex shrink-0 items-center gap-1 rounded-full border border-[rgba(90,61,43,0.18)] p-1">
+          <h2 className="font-serif text-lg font-medium tracking-[0.08em] text-[#fff8ee]/92">
+            过往记录
+          </h2>
+          <div className="flex shrink-0 items-center gap-1 rounded-full border border-white/18 bg-white/8 p-1 backdrop-blur-md">
             <button
               type="button"
-              className={`rounded-full px-3 py-1 text-[0.82rem] font-semibold transition-colors ${
+              className={`rounded-full px-3 py-1 font-serif text-[0.82rem] tracking-wide transition-colors ${
                 view === "normal"
-                  ? "bg-[rgba(103,148,75,0.16)] text-[#4d7436]"
-                  : "text-[#8a7156] hover:bg-[rgba(90,61,43,0.06)]"
+                  ? "bg-white/18 text-[#fff8ee]"
+                  : "text-white/58 hover:text-white/86"
               }`}
               onClick={() => setView("normal")}
             >
@@ -372,10 +388,10 @@ export default function HistoryPage() {
             </button>
             <button
               type="button"
-              className={`rounded-full px-3 py-1 text-[0.82rem] font-semibold transition-colors ${
+              className={`rounded-full px-3 py-1 font-serif text-[0.82rem] tracking-wide transition-colors ${
                 view === "trash"
-                  ? "bg-[rgba(103,148,75,0.16)] text-[#4d7436]"
-                  : "text-[#8a7156] hover:bg-[rgba(90,61,43,0.06)]"
+                  ? "bg-white/18 text-[#fff8ee]"
+                  : "text-white/58 hover:text-white/86"
               }`}
               onClick={() => setView("trash")}
             >
@@ -384,8 +400,7 @@ export default function HistoryPage() {
           </div>
         </div>
 
-        {/* 搜索 / 筛选 / 导出 */}
-        <div className="filter-bar">
+        <div className="filter-bar night-tools">
           <input
             className="filter-input"
             placeholder="搜索关键词…"
@@ -427,15 +442,21 @@ export default function HistoryPage() {
           </div>
         </div>
 
-        <div className="mt-6 space-y-5">
+        <div className="mt-6 space-y-4">
           {loading && (
-            <p className="text-center text-[0.9rem] text-[#9a8b78]">
+            <p className="py-10 text-center font-serif text-[0.9rem] tracking-wide text-white/48">
               正在翻找这些纸张……
             </p>
           )}
 
           {!loading && summaries.length === 0 && (
-            <div className="paper-card rounded-xl p-10 text-center text-[#9a8b78]">
+            <div className="history-note relative px-8 py-12 text-center font-serif text-[#6b5d4f]/80">
+              <img
+                src="/assets/scrap/tape-washi.png"
+                alt=""
+                draggable={false}
+                className="history-tape history-tape-l"
+              />
               {q || emotionFilter
                 ? "没有找到匹配的记录"
                 : "这里还很安静，写下第一篇记录吧"}
@@ -446,14 +467,41 @@ export default function HistoryPage() {
             summaries.map((s, i) => {
               const emo = getEmotion(s.emotion);
               const open = expandedId === s.id;
-              const tilt = open ? 0 : i % 2 === 0 ? -0.6 : 0.55;
+              const tilt = open ? 0 : i % 2 === 0 ? -0.8 : 0.7;
+              const isBear = s.source === "bear";
+              const excluded = !!s.excluded_from_insights;
               return (
                 <article
                   key={s.id}
-                  className="paper-card rise-in cursor-pointer rounded-xl p-5 transition-transform duration-300"
+                  className={`history-note rise-in relative cursor-pointer p-5 transition-transform duration-300 sm:p-6${
+                    isBear ? " bear-note" : ""
+                  }${excluded ? " excluded" : ""}`}
                   style={{ transform: `rotate(${tilt}deg)` }}
                   onClick={() => toggleExpand(s.id)}
                 >
+                  {isBear ? (
+                    <img
+                      src="/assets/scrap/tape-red.png"
+                      alt=""
+                      draggable={false}
+                      className="history-tape history-tape-bear"
+                    />
+                  ) : (
+                    <>
+                      <img
+                        src="/assets/scrap/tape-washi.png"
+                        alt=""
+                        draggable={false}
+                        className="history-tape history-tape-l"
+                      />
+                      <img
+                        src="/assets/scrap/tape-washi.png"
+                        alt=""
+                        draggable={false}
+                        className="history-tape history-tape-r"
+                      />
+                    </>
+                  )}
                   {/* 摘要 */}
                   <div className="flex items-center justify-between">
                     <span className="text-[0.78rem] text-[#9a8b78]">
@@ -470,18 +518,49 @@ export default function HistoryPage() {
                     </span>
                   </div>
 
-                  <p className="mt-2.5 line-clamp-2 text-[1rem] leading-relaxed text-[#3b3028]">
+                  <p className="history-note-body mt-2.5 line-clamp-2 font-serif text-[1.02rem] leading-relaxed text-[#3b3028]">
                     {s.content}
                   </p>
+                  {excluded && (
+                    <p className="mt-2 text-[0.75rem] leading-relaxed text-[#b0452e]/85">
+                      本删除仅是不在总结/图表中读取。
+                    </p>
+                  )}
 
-                  <div className="mt-3 flex items-center justify-between">
+                  <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
                     <span className="text-[0.8rem] text-[#8a7156]">
-                      {s.has_reflection
-                        ? `韧性 ${s.resilience_score}`
-                        : "还没复盘"}
+                      {isBear
+                        ? "小熊咨询"
+                        : s.has_reflection
+                          ? `韧性 ${s.resilience_score}`
+                          : "还没复盘"}
                     </span>
-                    <div className="flex items-center gap-3">
-                      {!s.has_reflection && (
+                    <div className="flex flex-wrap items-center gap-3">
+                      {isBear && (
+                        <label
+                          className="exclude-check"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <input
+                            type="checkbox"
+                            checked={excluded}
+                            onChange={(e) =>
+                              toggleExclude(s.id, e.target.checked)
+                            }
+                          />
+                          不计入总结
+                        </label>
+                      )}
+                      {isBear && s.chat_id && (
+                        <a
+                          href={`/ai-analysis?chat=${s.chat_id}&note=${s.id}`}
+                          className="reflect-cta"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          打开这次咨询 →
+                        </a>
+                      )}
+                      {!s.has_reflection && !isBear && (
                         <button
                           type="button"
                           className="reflect-cta"
@@ -545,7 +624,7 @@ export default function HistoryPage() {
                                 rows={4}
                               />
                             ) : (
-                              <p className="mt-1 whitespace-pre-wrap text-[#3b3028]">
+                              <p className="history-note-body mt-1 whitespace-pre-wrap text-[#3b3028]">
                                 {detail.content}
                               </p>
                             )}
@@ -756,7 +835,7 @@ export default function HistoryPage() {
           <div className="mt-6 flex justify-center">
             <button
               type="button"
-              className="btn-ghost"
+              className="glass-pill"
               onClick={loadMore}
               disabled={loadingMore}
             >
@@ -765,13 +844,14 @@ export default function HistoryPage() {
           </div>
         )}
       </section>
+      </div>
 
-      {/* 核心文案 */}
-      <p className="core-copy">
+      <p className="core-copy night-copy">
         你没有变得不会受伤。
         <br />
         只是下一次遇到类似的事情，你可能已经知道怎么面对了。
       </p>
+      </div>
       </main>
 
       {/* 补做三问 */}

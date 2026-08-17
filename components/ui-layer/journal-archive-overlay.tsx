@@ -91,9 +91,9 @@ export function JournalArchiveOverlay({
                       onClick={() => onOpenRecord(record)}
                       className="relative aspect-[4/3] overflow-hidden px-4 py-5 text-left text-[#241b16] sm:px-7 sm:py-6"
                       style={{
-                        backgroundColor: "#e8ded0",
+                        backgroundColor: "#efe6d6",
                         backgroundImage:
-                          "url('/assets/journal-paper-texture.png')",
+                          "linear-gradient(165deg, rgba(255,252,246,0.48), rgba(245,234,216,0.28)), url('/assets/papers/lined.png')",
                         backgroundPosition: "center",
                         backgroundSize: "cover",
                         filter:

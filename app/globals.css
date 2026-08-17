@@ -3120,3 +3120,466 @@
   font-size: 0.72rem;
   color: #8a7156;
 }
+
+/* ============================================================
+   风格统一：暗夜房间 + 暖纸纸张（对齐首页漫画 / 复古 / 温馨）
+   ============================================================ */
+.night-mote-pink {
+  animation: night-drift-a 12s ease-in-out infinite;
+}
+.night-mote-teal {
+  animation: night-drift-b 14s ease-in-out infinite;
+}
+@keyframes night-drift-a {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(12px, -9px);
+  }
+}
+@keyframes night-drift-b {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(-10px, 8px);
+  }
+}
+
+.eyebrow,
+.rflow-eyebrow,
+.ob-eyebrow,
+.thole-eyebrow,
+.rp-badge,
+.tw-brand,
+.dash-no,
+.ob-progress,
+.ob-mbti,
+.reflect-step {
+  font-family: "Nunito", "Iansui", "Kaiti SC", "STKaiti", "KaiTi", "楷体", serif;
+}
+
+.tw-input,
+.reflect-textarea,
+.rflow-textarea {
+  font-family: "Nunito", "Iansui", "Kaiti SC", "STKaiti", "KaiTi", "楷体", serif;
+}
+
+.btn-save {
+  color: #241b16;
+  background: linear-gradient(180deg, #fff8ee, #efe0cc);
+  border: 1px solid rgba(90, 61, 43, 0.22);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.72) inset,
+    0 10px 22px -12px rgba(40, 26, 16, 0.45);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+.btn-save:hover {
+  filter: brightness(1.03);
+  transform: translateY(-1px);
+}
+.btn-ghost {
+  font-family: inherit;
+  letter-spacing: 0.02em;
+}
+
+.section-title {
+  font-family: "Nunito", "Iansui", "Kaiti SC", "STKaiti", "KaiTi", "楷体", serif;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: #2d221c;
+}
+.section-title::before {
+  width: 18px;
+  height: 2px;
+  border-radius: 999px;
+  background: #b88961;
+  box-shadow: none;
+}
+
+.paper-card {
+  background:
+    linear-gradient(180deg, rgba(255, 253, 246, 0.62), rgba(245, 236, 220, 0.5)),
+    url("/assets/papers/graph.png");
+  background-size: cover;
+  border: 1px solid rgba(90, 61, 43, 0.1);
+  box-shadow: 0 16px 36px -22px rgba(40, 26, 16, 0.45);
+}
+
+.paper-inset {
+  background:
+    linear-gradient(180deg, rgba(255, 250, 240, 0.55), rgba(255, 248, 236, 0.42)),
+    url("/assets/papers/graph.png");
+  background-size: cover;
+  border: 1px solid rgba(73, 55, 43, 0.12);
+  border-radius: 3px;
+}
+
+.paper-notebook-body {
+  padding: 21% 7.5% 9% 14.5%;
+}
+@media (max-width: 640px) {
+  .paper-notebook-body {
+    padding: 20% 7% 8% 16%;
+  }
+}
+
+.history-note {
+  background-color: #efe6d6;
+  background-image:
+    linear-gradient(165deg, rgba(255, 252, 246, 0.52), rgba(245, 234, 216, 0.32)),
+    url("/assets/papers/lined.png");
+  background-position: center;
+  background-size: cover;
+  color: #241b16;
+  filter: drop-shadow(0 12px 20px rgba(0, 0, 0, 0.28));
+  overflow: visible;
+}
+.history-note:hover {
+  filter: drop-shadow(0 16px 26px rgba(0, 0, 0, 0.34));
+}
+
+.history-tape {
+  pointer-events: none;
+  position: absolute;
+  z-index: 0;
+  user-select: none;
+  mix-blend-mode: multiply;
+  max-height: 22px;
+  object-fit: cover;
+  object-position: top;
+}
+.history-tape-l {
+  top: -8px;
+  left: 6px;
+  width: 48px;
+  transform: none;
+}
+.history-tape-r {
+  top: -8px;
+  right: 6px;
+  width: 48px;
+  transform: scaleX(-1);
+}
+.history-tape-bear {
+  top: -18px;
+  left: 50%;
+  width: 16px;
+  transform: translateX(-50%) rotate(3deg);
+  mix-blend-mode: normal;
+}
+.history-note > :not(img) {
+  position: relative;
+  z-index: 1;
+}
+
+.night-tools .filter-input {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff8ee;
+  backdrop-filter: blur(10px);
+}
+.night-tools .filter-input::placeholder {
+  color: rgba(255, 248, 238, 0.42);
+}
+.night-tools .filter-input:focus {
+  border-color: rgba(240, 196, 143, 0.55);
+  box-shadow: 0 0 0 3px rgba(240, 196, 143, 0.12);
+}
+.night-tools .filter-chip {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.18);
+  color: rgba(255, 248, 238, 0.78);
+  backdrop-filter: blur(8px);
+}
+.night-tools .filter-chip:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+.night-tools .filter-chip.active {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(240, 196, 143, 0.5);
+  color: #fff8ee;
+}
+.night-tools .btn-ghost {
+  color: rgba(255, 248, 238, 0.78);
+  border-color: rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(8px);
+}
+.night-tools .btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff8ee;
+}
+
+.glass-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.55rem 1.2rem;
+  border-radius: 999px;
+  font-size: 0.86rem;
+  letter-spacing: 0.06em;
+  color: rgba(255, 248, 238, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+.glass-pill:hover {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.4);
+  color: #fff8ee;
+}
+.glass-pill:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.core-copy.night-copy {
+  color: rgba(255, 248, 238, 0.58);
+}
+
+.confirm-overlay {
+  background: rgba(12, 10, 20, 0.64);
+  backdrop-filter: blur(6px);
+}
+.confirm-dialog {
+  position: relative;
+  overflow: visible;
+  background-color: #efe6d6;
+  background-image:
+    linear-gradient(165deg, rgba(255, 252, 246, 0.55), rgba(245, 234, 216, 0.35)),
+    url("/assets/papers/lined.png");
+  background-size: cover;
+  border: 1px solid rgba(90, 61, 43, 0.12);
+  border-radius: 4px;
+  box-shadow: 0 24px 60px -18px rgba(0, 0, 0, 0.55);
+}
+.confirm-danger {
+  background: #b0452e;
+  border-radius: 999px;
+  letter-spacing: 0.04em;
+}
+
+.rflow,
+.draft,
+.ob {
+  background: #141021;
+}
+.rflow::after,
+.ob::after {
+  opacity: 0.35;
+}
+
+.rflow-inner,
+.draft-inner,
+.ob-inner {
+  position: relative;
+  z-index: 1;
+  overflow: visible;
+  background-color: #efe6d6;
+  background-image:
+    linear-gradient(165deg, rgba(255, 252, 246, 0.55), rgba(245, 234, 216, 0.32)),
+    url("/assets/papers/lined.png");
+  background-size: cover, cover;
+  background-blend-mode: soft-light, normal;
+  border: 1px solid rgba(90, 61, 43, 0.1);
+  border-radius: 4px;
+  padding: 36px 28px 52px;
+  box-shadow: 0 28px 64px -24px rgba(0, 0, 0, 0.55);
+}
+.rflow-inner::before,
+.draft-inner::before,
+.ob-inner::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: 8px;
+  z-index: 0;
+  width: 48px;
+  height: 20px;
+  background: url("/assets/scrap/tape-washi.png") top center / 48px auto no-repeat;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+}
+.rflow-inner::after,
+.draft-inner::after,
+.ob-inner::after {
+  content: "";
+  position: absolute;
+  top: -10px;
+  right: 8px;
+  z-index: 0;
+  width: 48px;
+  height: 20px;
+  background: url("/assets/scrap/tape-washi.png") top center / 48px auto no-repeat;
+  transform: scaleX(-1);
+  pointer-events: none;
+  mix-blend-mode: multiply;
+}
+.rflow-inner > *,
+.draft-inner > *,
+.ob-inner > * {
+  position: relative;
+  z-index: 1;
+}
+.ob-inner {
+  text-align: center;
+  padding: 40px 28px 48px;
+}
+
+.chat-scroll {
+  height: 340px;
+  padding: 8px 2px 12px;
+}
+.chat-avatar {
+  background: rgba(184, 137, 97, 0.16);
+  border: 1px solid rgba(184, 137, 97, 0.28);
+}
+.chat-row.ai .chat-bubble {
+  background-color: #f3eee4;
+  background-image:
+    linear-gradient(180deg, rgba(255, 253, 246, 0.62), rgba(247, 240, 228, 0.5)),
+    url("/assets/papers/graph.png");
+  background-size: cover;
+  color: #3b3028;
+  border: 1px solid rgba(90, 61, 43, 0.12);
+  border-bottom-left-radius: 4px;
+  box-shadow: 0 4px 12px -8px rgba(90, 61, 43, 0.35);
+  font-family: "Nunito", "Iansui", "Kaiti SC", "STKaiti", "KaiTi", "楷体", serif;
+}
+.chat-row.user .chat-bubble {
+  background-color: #ead6b6;
+  background-image:
+    linear-gradient(180deg, rgba(244, 230, 207, 0.55), rgba(234, 214, 182, 0.42)),
+    url("/assets/papers/lined.png");
+  background-size: cover;
+  color: #2d221c;
+  border: 1px solid rgba(90, 61, 43, 0.14);
+  border-bottom-right-radius: 4px;
+  font-family: "Nunito", "Iansui", "Kaiti SC", "STKaiti", "KaiTi", "楷体", serif;
+}
+.chat-input {
+  background: rgba(255, 253, 246, 0.78);
+  border-radius: 999px;
+  font-family: inherit;
+}
+.chat-send {
+  border-radius: 999px;
+  color: #241b16;
+  background: linear-gradient(180deg, #fff8ee, #efe0cc);
+  border: 1px solid rgba(90, 61, 43, 0.2);
+  font-weight: 600;
+}
+.chat-send:hover {
+  background: linear-gradient(180deg, #fffdf8, #f3e6d0);
+}
+.chat-finish {
+  color: #5a4030;
+  background: rgba(184, 137, 97, 0.12);
+  border: 1px solid rgba(184, 137, 97, 0.28);
+}
+
+.chatlog-item {
+  background:
+    linear-gradient(180deg, rgba(255, 250, 240, 0.5), rgba(255, 248, 236, 0.38)),
+    url("/assets/papers/graph.png");
+  background-size: cover;
+  border: 1px dashed rgba(73, 55, 43, 0.16);
+}
+.chatlog-msg.ai .chatlog-bubble {
+  background:
+    linear-gradient(180deg, rgba(255, 253, 246, 0.7), rgba(247, 240, 228, 0.55)),
+    url("/assets/papers/graph.png");
+  background-size: cover;
+}
+.chatlog-msg.user .chatlog-bubble {
+  background:
+    linear-gradient(180deg, rgba(244, 230, 207, 0.7), rgba(234, 214, 182, 0.55)),
+    url("/assets/papers/lined.png");
+  background-size: cover;
+}
+
+.ob-option,
+.ob-mbti,
+.ob-support {
+  background: rgba(255, 253, 246, 0.78);
+  border-radius: 6px;
+}
+.ob-option:hover,
+.ob-mbti:hover,
+.ob-support:hover {
+  border-color: rgba(184, 137, 97, 0.55);
+  background: #fffdf8;
+}
+
+.rflow-suggest-adopt {
+  background: #8a674c;
+}
+.rflow-suggest-adopt:hover {
+  background: #75563f;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .night-mote-pink,
+  .night-mote-teal {
+    animation: none !important;
+  }
+}
+
+.history-split {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.92fr) minmax(300px, 1.08fr);
+  gap: 28px;
+  align-items: start;
+}
+@media (max-width: 880px) {
+  .history-split {
+    grid-template-columns: 1fr;
+  }
+}
+
+.history-note.bear-note {
+  background-color: #c9a06a;
+  background-image:
+    linear-gradient(165deg, rgba(176, 69, 46, 0.22), rgba(120, 62, 38, 0.18)),
+    url("/assets/scrap/paper-kraft.png");
+  background-size: cover;
+  background-blend-mode: multiply, normal;
+  box-shadow:
+    inset 0 0 0 1px rgba(120, 52, 32, 0.22),
+    0 12px 20px rgba(0, 0, 0, 0.28);
+}
+.history-note.excluded .history-note-body {
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+  opacity: 0.72;
+}
+
+.exclude-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #b0452e;
+  cursor: pointer;
+}
+.exclude-check input {
+  accent-color: #b0452e;
+}
+
+.chat-watermark {
+  margin: 1.4rem 0.6rem 0.4rem;
+  text-align: center;
+  font-size: 0.95rem;
+  line-height: 1.85;
+  color: rgba(90, 61, 43, 0.38);
+  pointer-events: none;
+}
+
+
