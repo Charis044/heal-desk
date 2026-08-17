@@ -21,6 +21,10 @@ import {
 } from "@/components/journal/journal-record"
 import { useVinylAudio } from "@/components/audio/audio-library"
 import { syncJournalToBackend } from "@/lib/backend-bridge"
+import { useRouter } from "next/navigation"
+import Onboarding from "@/components/windfall/Onboarding"
+import { getProfile, saveProfile } from "@/lib/api"
+import type { UserProfile } from "@/lib/types"
 import type { EmotionId } from "./emotion-theme"
 
 /**
@@ -37,7 +41,9 @@ import type { EmotionId } from "./emotion-theme"
  * SceneUI sits on the viewport (overlay), not inside the artboard.
  */
 export function ResilienceScene() {
+  const router = useRouter()
   const { playRandomTrack, isMuted, toggleMuted } = useVinylAudio()
+  const [onboarded, setOnboarded] = useState<boolean | null>(null)
   const [selectedEmotion, setSelectedEmotion] = useState<EmotionId>("calm")
   const [isEmotionPickerOpen, setIsEmotionPickerOpen] = useState(false)
   const [isJournalOpen, setIsJournalOpen] = useState(false)
@@ -58,6 +64,34 @@ export function ResilienceScene() {
   useEffect(() => {
     setRecords(readJournalRecords())
   }, [])
+
+  useEffect(() => {
+    let alive = true
+    getProfile()
+      .then((p) => {
+        if (alive) setOnboarded(p !== null)
+      })
+      .catch(() => {
+        if (alive) setOnboarded(true)
+      })
+    return () => {
+      alive = false
+    }
+  }, [])
+
+  const handleOnboardComplete = async (profile: UserProfile) => {
+    try {
+      await saveProfile(profile)
+    } catch {
+      // 保存失败不阻塞进入
+    }
+    setOnboarded(true)
+  }
+
+  if (onboarded === null) return null
+  if (onboarded === false) {
+    return <Onboarding onComplete={handleOnboardComplete} />
+  }
 
   return (
     <SceneStage
@@ -169,7 +203,7 @@ export function ResilienceScene() {
           setIsEmotionPickerOpen(false)
           setIsJournalOpen(false)
           setEditingRecordId(null)
-          setIsArchiveOpen(true)
+          router.push("/history")
         }}
       />
 

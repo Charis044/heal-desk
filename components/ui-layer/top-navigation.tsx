@@ -27,6 +27,7 @@ export function TopNavigation() {
                 onClick={() => {
                   setActive(item)
                   if (item === "成长") router.push("/analysis")
+                  if (item === "记录") router.push("/history")
                 }}
                 className={[
                   "rounded-full px-2.5 py-1 font-serif text-[16px] tracking-wide transition-[opacity,transform,background-color,color] duration-300 ease-out [text-shadow:0_1px_10px_rgba(0,0,0,0.5)]",
