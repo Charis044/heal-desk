@@ -6,6 +6,26 @@ interface GrowthProfileProps {
 }
 
 /**
+ * 能力标签 → 视觉图标
+ * 给不同能力配不同图标，避免所有成长点都长一个样。
+ * 兜底用 🧬（与历史页 detail 保持一致）。
+ */
+const AREA_ICON: Record<string, string> = {
+  自我觉察: "🪞",
+  抗拒绝: "🛡️",
+  接受反馈: "👂",
+  设立边界: "🚧",
+  自我接纳: "🕊️",
+  行动力: "⚡",
+  韧性: "🌱",
+  持续记录: "✍️",
+};
+
+export function areaIcon(label: string): string {
+  return AREA_ICON[label] ?? "🧬";
+}
+
+/**
  * 「我的韧性画像」：AI 看过历史日记后，自动总结的「正在发生的变化」。
  *
  * 不是人格测试、不是成长树、不是 Dashboard。
@@ -52,8 +72,8 @@ export default function GrowthProfileView({
           {profile.strengths.map((s) => (
             <div key={s.label} className="paper-inset gprof-insight p-5">
               <div className="flex items-start gap-3">
-                <span className="gprof-dna" aria-hidden>
-                  🧬
+                <span className="gprof-icon" aria-hidden>
+                  {areaIcon(s.label)}
                 </span>
                 <div>
                   <p className="gprof-label">{s.label}</p>
@@ -75,7 +95,7 @@ export default function GrowthProfileView({
           </span>
           {profile.growth_areas.map((a) => (
             <span key={a} className="gprof-chip">
-              🧬 {a}
+              {areaIcon(a)} {a}
             </span>
           ))}
         </div>

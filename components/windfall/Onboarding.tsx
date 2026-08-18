@@ -56,7 +56,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
       <div className="ob">
         <NightAtmosphere intensity="overlay" />
         <div className="ob-inner ob-done">
-          <p className="ob-eyebrow">RESILIENCE SPROUT</p>
+          <p className="ob-eyebrow">PING-I-CABIN</p>
           <h2 className="ob-done-title">好了，我大概认识你了。</h2>
           <p className="ob-done-sub">接下来的日子，慢慢写，慢慢来。</p>
         </div>
@@ -70,7 +70,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
     <div className="ob">
       <NightAtmosphere intensity="overlay" />
       <div className="ob-inner">
-        <p className="ob-eyebrow">RESILIENCE SPROUT</p>
+        <p className="ob-eyebrow">PING-I-CABIN</p>
         <p className="ob-intro">第一次见面，让我简单认识一下你。</p>
         <div className="ob-progress">{progress}</div>
 

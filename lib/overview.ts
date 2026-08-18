@@ -40,7 +40,7 @@ function buildSummary(
     parts.push(`正在长出「${growthAreas[0]}」`);
   }
   if (chatCount > 0) {
-    parts.push(`和韧芽聊过 ${chatCount} 次`);
+    parts.push(`和拼忆书屋聊过 ${chatCount} 次`);
   }
   if (parts.length === 0) {
     return "你把日子写下来了。改变不一定快，但它在发生。";

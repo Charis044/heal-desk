@@ -5,7 +5,7 @@ import { NightAtmosphere } from "@/components/ui-layer/night-atmosphere";
 import { PaperSheet } from "@/components/ui-layer/paper-sheet";
 import ConfirmDialog from "@/components/windfall/ConfirmDialog";
 import GrowthChart from "@/components/windfall/GrowthChart";
-import GrowthProfileView from "@/components/windfall/GrowthProfile";
+import GrowthProfileView, { areaIcon } from "@/components/windfall/GrowthProfile";
 import ReflectionFlow, {
   type ReflectionAnswers,
 } from "@/components/windfall/ReflectionFlow";
@@ -313,14 +313,14 @@ export default function HistoryPage() {
 
   return (
     <>
-      <main className="relative h-[100dvh] overflow-y-auto bg-[#141021] text-[#fff8ee]">
+      <main className="relative flex h-[100dvh] flex-col bg-[#141021] text-[#fff8ee] history-main">
       <NightAtmosphere />
-      <FunctionPageHeader className="max-w-[1180px]" />
+      <FunctionPageHeader className="max-w-[1180px] shrink-0" />
 
-      <div className="relative z-10 mx-auto w-full max-w-[1180px] px-4 pb-20 sm:px-6">
-      <header className="mb-8 inline-block max-w-[680px] rounded-2xl border border-white/16 bg-[rgba(23,18,34,0.42)] px-5 py-4 shadow-[0_12px_32px_rgba(0,0,0,0.2)] backdrop-blur-md">
+      <div className="history-body relative z-10 mx-auto flex w-full max-w-[1180px] min-h-0 flex-1 flex-col px-4 pb-20 sm:px-6">
+      <header className="mb-8 inline-block max-w-[680px] shrink-0 rounded-2xl border border-white/16 bg-[rgba(23,18,34,0.42)] px-5 py-4 shadow-[0_12px_32px_rgba(0,0,0,0.2)] backdrop-blur-md">
         <p className="font-serif text-[11px] tracking-[0.28em] text-[#f0c48f]/72">
-          PAST PAGES · 过往记录
+          PAST PAGES · 过往纸堆
         </p>
         <h1 className="mt-3 font-serif text-2xl font-medium leading-snug tracking-[0.04em] text-[#fff8ee] sm:text-[1.75rem]">
           翻开过去保存下来的自己，
@@ -330,6 +330,7 @@ export default function HistoryPage() {
       </header>
 
       <div className="history-split">
+      <div className="history-pane-l min-h-0 pr-1">
       <PaperSheet variant="notebook" className="min-h-[640px]">
         <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
           <p className="font-serif text-[10px] tracking-[0.22em] text-[#5c4739]/55">
@@ -368,12 +369,13 @@ export default function HistoryPage() {
           </div>
         </section>
       </PaperSheet>
+      </div>
 
-      <section>
+      <section className="history-pane-r min-h-0 pl-1">
         <div className="rounded-2xl border border-white/16 bg-[rgba(23,18,34,0.42)] px-4 py-3 shadow-[0_10px_28px_rgba(0,0,0,0.18)] backdrop-blur-md">
           <div className="flex items-center justify-between gap-4">
             <h2 className="font-serif text-lg font-medium tracking-[0.08em] text-[#fff8ee]/92">
-              过往记录
+              过往纸堆
             </h2>
             <div className="flex shrink-0 items-center gap-1 rounded-full border border-white/18 bg-white/8 p-1 backdrop-blur-md">
               <button
@@ -712,7 +714,9 @@ export default function HistoryPage() {
                           {detail.growth_area && (
                             <div className="flex items-center gap-2">
                               <span className="detail-label">正在形成的能力</span>
-                              <span className="gprof-chip">🧬 {detail.growth_area}</span>
+                              <span className="gprof-chip">
+                                {areaIcon(detail.growth_area)} {detail.growth_area}
+                              </span>
                             </div>
                           )}
 
@@ -848,7 +852,7 @@ export default function HistoryPage() {
       </section>
       </div>
 
-      <p className="core-copy night-copy rounded-2xl border border-white/16 bg-[rgba(23,18,34,0.42)] px-5 py-4 shadow-[0_12px_32px_rgba(0,0,0,0.2)] backdrop-blur-md">
+      <p className="core-copy night-copy shrink-0 rounded-2xl border border-white/16 bg-[rgba(23,18,34,0.42)] px-5 py-4 shadow-[0_12px_32px_rgba(0,0,0,0.2)] backdrop-blur-md">
         你没有变得不会受伤。
         <br />
         只是下一次遇到类似的事情，你可能已经知道怎么面对了。

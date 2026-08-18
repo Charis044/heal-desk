@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "WATCHPACK_POLLING=true next dev --webpack -p 3010",
-    "build": "next build",
-    "start": "next start",
+    "dev": "WATCHPACK_POLLING=true node scripts/next-run.mjs dev --webpack -p 3010",
+    "build": "node scripts/next-run.mjs build",
+    "start": "node scripts/next-run.mjs start",
     "lint": "tsc --noEmit"
   },
   "dependencies": {

@@ -22,7 +22,7 @@ export const EMOTIONS: EmotionDef[] = [
   { key: "tired", label: "疲惫", color: "#67944B", hint: "累了，就慢一点", group: "negative" },
   { key: "confused", label: "迷茫", color: "#078D8C", hint: "看不清方向是暂时的", group: "negative" },
   // 中性 / 稳定
-  { key: "calm", label: "平静", color: "#FFC20A", hint: "安静，也是一种力量", group: "neutral" },
+  { key: "calm", label: "平静", color: "#E8EDF2", hint: "安静，也是一种力量", group: "neutral" },
   // 积极 / 明亮
   { key: "happy", label: "开心", color: "#F5B301", hint: "开心，就让它自然发生", group: "positive" },
   { key: "excited", label: "兴奋", color: "#E8493D", hint: "那股兴奋劲儿，值得被记住", group: "positive" },

@@ -24,7 +24,7 @@ export default function PaperStack({ entries, onOpen }: PaperStackProps) {
       type="button"
       onClick={onOpen}
       className="stack block w-full text-left"
-      aria-label="打开过往记录"
+      aria-label="打开过往纸堆"
     >
       <div className="relative" style={{ height: "150px" }}>
         {/* 底层纸堆 */}
@@ -73,7 +73,7 @@ export default function PaperStack({ entries, onOpen }: PaperStackProps) {
 
       <div className="mt-3 flex items-center justify-between px-1">
         <span className="text-[0.85rem] font-semibold text-[#5a4030]">
-          过往记录
+          过往纸堆
         </span>
         <span className="flex items-center gap-1.5 text-[0.8rem] text-[#8a7156]">
           共 {entries.length} 篇

@@ -1,11 +1,12 @@
 import type { ChatMessage, ChatRequest } from "@/lib/types";
 import { aiChatCompletion, aiErrorResponse } from "@/lib/ai-upstream";
+import { AGENT_IDENTITY_RULES } from "@/lib/agent-identity";
 import { NextResponse } from "next/server";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const SYSTEM_PROMPT = `你是韧芽房间里的小熊，专门做「针对一件具体事情」的咨询。
+const SYSTEM_PROMPT = `你是拼忆书屋里的小熊，专门做「针对一件具体事情」的咨询。
 
 你可以聊的范围只有这些：某一篇记录、某一天、某几天、某段时间，或一个具体的问题。
 你现在看不到用户的日记，也不要假装已经读过。
@@ -40,7 +41,7 @@ export async function POST(req: Request) {
     : messages[messages.length - 1];
 
   const context = body?.context?.trim();
-  const blocks = [SYSTEM_PROMPT];
+  const blocks = [SYSTEM_PROMPT, AGENT_IDENTITY_RULES];
   if (context) {
     blocks.push(
       `用户主动贴上的上下文（可能是某一篇记录或一段时间的说明）。只有这段可以当背景，不要扩展成「我读过全部日记」：\n${context}`,

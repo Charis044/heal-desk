@@ -15,7 +15,7 @@ interface ChatWindowProps {
 
 const HINT =
   "可以说一篇记录、某一天、某几天、某段时间，或一个具体问题。想问得越具体，我越能一起看清楚。";
-const STORAGE_KEY = "renya-chat-messages";
+const STORAGE_KEY = "ping-i-cabin-chat-messages";
 
 function loadSavedMessages(): ChatMessage[] {
   if (typeof window === "undefined") return [];

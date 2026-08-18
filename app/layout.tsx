@@ -3,7 +3,7 @@ import type { Metadata, Viewport } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Resilience Sprout · 韧芽',
+  title: 'Ping-i-Cabin · 拼忆书屋',
   description: '一间夜里的插画小屋，坐在书桌前，安放此刻的情绪。',
   generator: 'v0.app',
   icons: {

@@ -58,7 +58,7 @@ export function JournalArchiveOverlay({
           transition={{ duration: 0.35, ease: "easeOut" }}
           role="dialog"
           aria-modal="true"
-          aria-label="过往记录"
+          aria-label="过往纸堆"
         >
           <button
             type="button"
@@ -70,7 +70,7 @@ export function JournalArchiveOverlay({
 
           <div className="mx-auto w-full max-w-[920px]">
             <header className="mb-10 text-center text-white">
-              <p className="font-serif text-2xl tracking-[0.16em]">过往记录</p>
+              <p className="font-serif text-2xl tracking-[0.16em]">过往纸堆</p>
               <p className="mt-2 font-serif text-sm tracking-wide text-white/58">
                 点击一张便签，继续当时没有写完的话
               </p>

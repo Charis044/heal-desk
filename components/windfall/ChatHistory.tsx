@@ -14,7 +14,7 @@ function formatDate(iso: string): string {
 }
 
 /**
- * 「聊天内容回溯」：翻看过去和韧芽聊过的天。
+ * 「聊天内容回溯」：翻看过去和拼忆书屋聊过的天。
  * 列表只展示预览；点开可读完整对话，可删除。
  */
 export default function ChatHistory() {

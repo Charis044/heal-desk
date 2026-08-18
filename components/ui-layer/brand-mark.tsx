@@ -8,7 +8,7 @@ export function BrandMark() {
     <a
       href="/"
       className="pointer-events-auto absolute left-6 top-5 z-50 flex items-start gap-2.5 rounded-2xl border border-white/18 bg-[rgba(23,18,34,0.42)] px-3 py-2.5 text-[rgba(255,252,245,0.96)] shadow-[0_8px_28px_rgba(0,0,0,0.2)] backdrop-blur-md transition-[opacity,transform,color] duration-300 ease-out hover:scale-[1.015] hover:border-white/30 hover:text-white focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/55 sm:left-8 sm:top-7"
-      aria-label="韧芽 Resilience Sprout"
+      aria-label="拼忆书屋 Ping-i-Cabin"
     >
       <SproutMark />
       <span className="flex flex-col leading-none">
@@ -16,13 +16,13 @@ export function BrandMark() {
           className="font-serif text-[22px] font-medium tracking-[0.04em]"
           style={{ textShadow: "0 1px 12px rgba(0,0,0,0.5)" }}
         >
-          韧芽
+          拼忆书屋
         </span>
         <span
           className="mt-1.5 font-serif text-[11px] font-normal uppercase tracking-[0.2em] text-[rgba(255,248,238,0.82)]"
           style={{ textShadow: "0 1px 10px rgba(0,0,0,0.45)" }}
         >
-          Resilience Sprout
+          Ping-i-Cabin
         </span>
       </span>
     </a>

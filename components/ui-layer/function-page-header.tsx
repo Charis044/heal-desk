@@ -23,13 +23,13 @@ export function FunctionPageHeader({
       <a
         href="/"
         className="rounded-xl border border-white/16 bg-[rgba(23,18,34,0.38)] px-3 py-2.5 flex items-start gap-2 font-serif text-[#fff8ee]/92 shadow-[0_8px_24px_rgba(0,0,0,0.18)] backdrop-blur-md transition-[opacity,border-color] hover:border-white/30 hover:opacity-100"
-        aria-label="韧芽 Resilience Sprout"
+        aria-label="拼忆书屋 Ping-i-Cabin"
       >
         <SproutMark />
         <span className="flex flex-col leading-none">
-          <span className="text-lg tracking-[0.08em]">韧芽</span>
+          <span className="text-lg tracking-[0.08em]">拼忆书屋</span>
           <span className="mt-1.5 text-[10px] uppercase tracking-[0.2em] text-[#fff8ee]/46">
-            Resilience Sprout
+            Ping-i-Cabin
           </span>
         </span>
       </a>

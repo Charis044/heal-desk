@@ -44,7 +44,7 @@ export async function GET(req: Request) {
     return new NextResponse(md, {
       headers: {
         "Content-Type": "text/markdown; charset=utf-8",
-        "Content-Disposition": `attachment; filename="renya-entries.md"`,
+        "Content-Disposition": `attachment; filename="ping-i-cabin-entries.md"`,
       },
     });
   }
@@ -53,7 +53,7 @@ export async function GET(req: Request) {
   return new NextResponse(JSON.stringify(sorted, null, 2), {
     headers: {
       "Content-Type": "application/json; charset=utf-8",
-      "Content-Disposition": `attachment; filename="renya-entries.json"`,
+      "Content-Disposition": `attachment; filename="ping-i-cabin-entries.json"`,
     },
   });
 }
