@@ -16,7 +16,6 @@ type PaperSheetProps = {
   className?: string
   variant?: PaperVariant
   tape?: TapeKind | TapeKind[]
-  sticker?: boolean
 }
 
 const TEXTURE: Record<PaperVariant, string> = {
@@ -126,14 +125,12 @@ export function PaperSheet({
   className,
   variant = "torn",
   tape,
-  sticker,
 }: PaperSheetProps) {
   const kinds = tape
     ? Array.isArray(tape)
       ? tape
       : [tape]
     : DEFAULT_TAPE[variant] ?? []
-  const showSticker = sticker ?? variant === "notebook"
   const torn = variant === "torn"
 
   return (
@@ -162,14 +159,6 @@ export function PaperSheet({
       <div className="pointer-events-none absolute inset-x-0 -top-2 z-[1] h-[18px] overflow-hidden">
         <PaperTapes kinds={kinds} />
       </div>
-      {showSticker && (
-        <img
-          src="/assets/scrap/blue-butterfly-tl.png"
-          alt=""
-          draggable={false}
-          className="pointer-events-none absolute right-[6.5%] top-[3.8%] z-[2] w-[18%] max-w-[88px] select-none opacity-90 mix-blend-multiply"
-        />
-      )}
       {variant === "notebook" ? (
         <div className="paper-notebook-body relative z-10">{children}</div>
       ) : (

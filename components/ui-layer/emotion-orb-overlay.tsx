@@ -75,7 +75,7 @@ export function EmotionOrbOverlay({
             ×
           </button>
 
-          <div className="pointer-events-none fixed left-1/2 top-1/2 z-10 hidden w-[22rem] -translate-x-1/2 -translate-y-1/2 text-center md:block">
+          <div className="pointer-events-none fixed left-1/2 top-1/2 z-10 hidden w-[22rem] -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-white/18 bg-[rgba(17,13,28,0.58)] px-7 py-6 text-center shadow-[0_14px_42px_rgba(0,0,0,0.24)] backdrop-blur-md md:block">
             <p className="font-serif text-sm tracking-[0.28em] text-white/60">
               此刻，更接近哪一种？
             </p>
@@ -94,7 +94,7 @@ export function EmotionOrbOverlay({
           </div>
 
           <div className="grid min-h-full grid-cols-3 content-center gap-x-4 gap-y-8 px-5 py-20 md:block">
-            <div className="col-span-3 mb-2 text-center md:hidden">
+            <div className="col-span-3 mb-2 rounded-2xl border border-white/18 bg-[rgba(17,13,28,0.58)] px-5 py-4 text-center shadow-[0_12px_32px_rgba(0,0,0,0.2)] backdrop-blur-md md:hidden">
               <p className="font-serif text-base tracking-[0.2em] text-white/80">
                 此刻，更接近哪一种？
               </p>
@@ -159,7 +159,7 @@ export function EmotionOrbOverlay({
                     >
                       {emotion.label}
                     </span>
-                    <span className="mt-1 hidden max-w-[10rem] text-center font-serif text-[11px] leading-5 text-white/60 max-md:block">
+                    <span className="mt-1 hidden max-w-[10rem] rounded-lg bg-[rgba(12,9,20,0.46)] px-2 py-1 text-center font-serif text-[11px] leading-5 text-white/78 shadow-[0_4px_14px_rgba(0,0,0,0.18)] backdrop-blur-sm max-md:block">
                       {emotion.message}
                     </span>
                   </motion.button>

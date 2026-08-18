@@ -7,7 +7,7 @@ export function BrandMark() {
   return (
     <a
       href="/"
-      className="pointer-events-auto absolute left-8 top-7 z-50 flex items-start gap-2.5 text-[rgba(255,252,245,0.96)] transition-[opacity,transform,color] duration-300 ease-out hover:scale-[1.015] hover:text-white focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/40"
+      className="pointer-events-auto absolute left-6 top-5 z-50 flex items-start gap-2.5 rounded-2xl border border-white/18 bg-[rgba(23,18,34,0.42)] px-3 py-2.5 text-[rgba(255,252,245,0.96)] shadow-[0_8px_28px_rgba(0,0,0,0.2)] backdrop-blur-md transition-[opacity,transform,color] duration-300 ease-out hover:scale-[1.015] hover:border-white/30 hover:text-white focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/55 sm:left-8 sm:top-7"
       aria-label="韧芽 Resilience Sprout"
     >
       <SproutMark />

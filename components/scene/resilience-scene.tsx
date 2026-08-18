@@ -10,6 +10,7 @@ import { Typewriter } from "./typewriter"
 import { PaperStack } from "./paper-stack"
 import { TeddyBear } from "./teddy-bear"
 import { SceneUI } from "@/components/ui-layer/scene-ui"
+import { SceneTutorial } from "@/components/ui-layer/scene-tutorial"
 import { EmotionOrbOverlay } from "@/components/ui-layer/emotion-orb-overlay"
 import { JournalEditorOverlay } from "@/components/ui-layer/journal-editor-overlay"
 import { JournalArchiveOverlay } from "@/components/ui-layer/journal-archive-overlay"
@@ -98,6 +99,7 @@ export function ResilienceScene() {
       overlay={
         <>
           <SceneUI />
+          <SceneTutorial />
           <EmotionOrbOverlay
             open={isEmotionPickerOpen}
             selected={selectedEmotion}

@@ -22,7 +22,7 @@ export function FunctionPageHeader({
     >
       <a
         href="/"
-        className="flex items-start gap-2 font-serif text-[#fff8ee]/90 transition-opacity hover:opacity-70"
+        className="rounded-xl border border-white/16 bg-[rgba(23,18,34,0.38)] px-3 py-2.5 flex items-start gap-2 font-serif text-[#fff8ee]/92 shadow-[0_8px_24px_rgba(0,0,0,0.18)] backdrop-blur-md transition-[opacity,border-color] hover:border-white/30 hover:opacity-100"
         aria-label="韧芽 Resilience Sprout"
       >
         <SproutMark />

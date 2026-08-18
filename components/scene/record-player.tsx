@@ -103,7 +103,7 @@ export function RecordPlayer({
         onClick={onToggleMute}
         aria-pressed={muted}
         aria-label={muted ? "开启背景音乐" : "静音背景音乐"}
-        className="absolute z-30 flex items-center gap-1.5 rounded-full border border-white/30 bg-black/22 px-3 py-1.5 font-serif text-[12px] tracking-wide text-white/82 backdrop-blur-[6px] transition-[background-color,border-color,color,transform] hover:scale-[1.03] hover:border-white/50 hover:text-white"
+        className="absolute z-30 flex items-center gap-1.5 rounded-full border border-white/40 bg-[rgba(13,10,21,0.58)] px-3.5 py-2 font-serif text-[13px] tracking-wide text-white/92 shadow-[0_6px_18px_rgba(0,0,0,0.22)] backdrop-blur-md transition-[background-color,border-color,color,transform] hover:scale-[1.03] hover:border-white/65 hover:bg-[rgba(13,10,21,0.7)] hover:text-white"
         style={{
           left: "40%",
           top: "40%",

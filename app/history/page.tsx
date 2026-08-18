@@ -318,7 +318,7 @@ export default function HistoryPage() {
       <FunctionPageHeader className="max-w-[1180px]" />
 
       <div className="relative z-10 mx-auto w-full max-w-[1180px] px-4 pb-20 sm:px-6">
-      <header className="mb-8">
+      <header className="mb-8 inline-block max-w-[680px] rounded-2xl border border-white/16 bg-[rgba(23,18,34,0.42)] px-5 py-4 shadow-[0_12px_32px_rgba(0,0,0,0.2)] backdrop-blur-md">
         <p className="font-serif text-[11px] tracking-[0.28em] text-[#f0c48f]/72">
           PAST PAGES · 过往记录
         </p>
@@ -370,33 +370,35 @@ export default function HistoryPage() {
       </PaperSheet>
 
       <section>
-        <div className="flex items-center justify-between gap-4">
-          <h2 className="font-serif text-lg font-medium tracking-[0.08em] text-[#fff8ee]/92">
-            过往记录
-          </h2>
-          <div className="flex shrink-0 items-center gap-1 rounded-full border border-white/18 bg-white/8 p-1 backdrop-blur-md">
-            <button
-              type="button"
-              className={`rounded-full px-3 py-1 font-serif text-[0.82rem] tracking-wide transition-colors ${
-                view === "normal"
-                  ? "bg-white/18 text-[#fff8ee]"
-                  : "text-white/58 hover:text-white/86"
-              }`}
-              onClick={() => setView("normal")}
-            >
-              记录
-            </button>
-            <button
-              type="button"
-              className={`rounded-full px-3 py-1 font-serif text-[0.82rem] tracking-wide transition-colors ${
-                view === "trash"
-                  ? "bg-white/18 text-[#fff8ee]"
-                  : "text-white/58 hover:text-white/86"
-              }`}
-              onClick={() => setView("trash")}
-            >
-              回收站
-            </button>
+        <div className="rounded-2xl border border-white/16 bg-[rgba(23,18,34,0.42)] px-4 py-3 shadow-[0_10px_28px_rgba(0,0,0,0.18)] backdrop-blur-md">
+          <div className="flex items-center justify-between gap-4">
+            <h2 className="font-serif text-lg font-medium tracking-[0.08em] text-[#fff8ee]/92">
+              过往记录
+            </h2>
+            <div className="flex shrink-0 items-center gap-1 rounded-full border border-white/18 bg-white/8 p-1 backdrop-blur-md">
+              <button
+                type="button"
+                className={`rounded-full px-3 py-1 font-serif text-[0.82rem] tracking-wide transition-colors ${
+                  view === "normal"
+                    ? "bg-white/18 text-[#fff8ee]"
+                    : "text-white/58 hover:text-white/86"
+                }`}
+                onClick={() => setView("normal")}
+              >
+                记录
+              </button>
+              <button
+                type="button"
+                className={`rounded-full px-3 py-1 font-serif text-[0.82rem] tracking-wide transition-colors ${
+                  view === "trash"
+                    ? "bg-white/18 text-[#fff8ee]"
+                    : "text-white/58 hover:text-white/86"
+                }`}
+                onClick={() => setView("trash")}
+              >
+                回收站
+              </button>
+            </div>
           </div>
         </div>
 
@@ -846,7 +848,7 @@ export default function HistoryPage() {
       </section>
       </div>
 
-      <p className="core-copy night-copy">
+      <p className="core-copy night-copy rounded-2xl border border-white/16 bg-[rgba(23,18,34,0.42)] px-5 py-4 shadow-[0_12px_32px_rgba(0,0,0,0.2)] backdrop-blur-md">
         你没有变得不会受伤。
         <br />
         只是下一次遇到类似的事情，你可能已经知道怎么面对了。
